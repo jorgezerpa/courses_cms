@@ -1,9 +1,20 @@
-import express from 'express'
+import express, { Application } from "express";
+import routerApi from './routes';
 
-const app = express()
+// const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
-app.get('/', (req, res)=>{
-    res.send('holiwiiis')
-})
+const app:Application = express();
+const port:number = 3000;
 
-app.listen(3001, () => console.log('server running on port 3001'))
+app.use(express.json());
+
+
+routerApi(app);
+
+// app.use(logErrors);
+// app.use(boomErrorHandler);
+// app.use(errorHandler);
+
+app.listen(port, ():void => {
+  console.log('app listen in port' +  port);
+});
