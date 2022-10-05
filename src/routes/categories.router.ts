@@ -6,5 +6,4 @@ router.get('/', (req:Request, res:Response) => {
     res.json('categories list')
 })
 
-
 export default router;
