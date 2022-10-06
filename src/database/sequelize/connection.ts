@@ -22,3 +22,4 @@ Product.init(ProductSchema, { sequelize })
 sequelize.sync()
 
 export default sequelize
+  

@@ -1,5 +1,8 @@
 import express, { Router, Response, Request, NextFunction } from 'express'
 import productService from '../services/products.service'
+import { createProductSchema, updateProductSchema, getProductSchema } from '../schemas/product.schema'
+import validatorHandler from '../middlewares/validator.handler'
+
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
 
@@ -16,7 +19,7 @@ router.get('/', async(req:Request, res:Response, next:NextFunction) => {
   }
 });
 
-router.get('/:id', async(req:Request, res:Response, next:NextFunction) => {
+router.get('/:id', validatorHandler(getProductSchema, 'params'),  async(req:Request, res:Response, next:NextFunction) => {
   try {
     const { id } = req.params
     const product = await productService.findOne(id);
@@ -28,7 +31,7 @@ router.get('/:id', async(req:Request, res:Response, next:NextFunction) => {
   }
 });
 
-router.post('/', upload.single('image'), async(req:Request, res:Response, next:NextFunction) => {
+router.post('/', upload.single('image'), validatorHandler(createProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const data = req.body
     const product = await productService.create(data);
@@ -40,10 +43,11 @@ router.post('/', upload.single('image'), async(req:Request, res:Response, next:N
   }
 });
 
-router.patch('/:id', async(req:Request, res:Response, next:NextFunction) => {
+router.patch('/:id', upload.single('image'), validatorHandler(getProductSchema, 'params'), validatorHandler(updateProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const { id } = req.params
     const changes = req.body
+    
     const product = await productService.update(id, changes);
     res.json({
       product: product
@@ -53,7 +57,7 @@ router.patch('/:id', async(req:Request, res:Response, next:NextFunction) => {
   }
 });
 
-router.delete('/:id', async(req:Request, res:Response, next:NextFunction) => {
+router.delete('/:id', validatorHandler(getProductSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const { id } = req.params
     const productId = await productService.delete(id);
