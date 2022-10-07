@@ -1,6 +1,5 @@
 import express, { Application } from "express";
 import routerApi from './routes';
-import "reflect-metadata"
 
 // const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 import { logErrors, errorHandler } from './middlewares/error.handler'
@@ -20,3 +19,5 @@ app.use(errorHandler);
 app.listen(port, ():void => {
   console.log('app listen in port ' +  port);
 });
+
+

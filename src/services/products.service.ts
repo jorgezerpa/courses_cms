@@ -1,10 +1,12 @@
-import sequelize from "../database/sequelize/connection"
 import boom from "@hapi/boom"
-const { models } = sequelize
+import { Product } from "../database/typeorm/entities/product"
+import AppDataSource from "../database/typeorm"
+
+const productModel = AppDataSource.getRepository(Product)
 
 const productService = {
     get: async function(){
-        const result = await models.Product.findAll()
+        const result = await productModel.find()
         if(!result){
             throw boom.notFound('products not found')
         }
@@ -13,35 +15,36 @@ const productService = {
         }
         return result
     },
-    findOne: async function(id: number|string){
-        const product = await models.Product.findByPk(id)
+    findOne: async function(productId: number){
+        const product = await productModel.findOneBy({id:productId})
         if(!product){
             throw boom.notFound('product not found')
         }
         return product    
     },
-    create: async function(data: any){
-        const newProduct = await models.Product.create(data)
+    create: async function(data: Product){
+        const newProduct = await productModel.save(data)
         if(!newProduct){
             throw boom.badRequest('Can not create the product')
         }
         return newProduct
     },
-    update: async function(id:number|string, changes: any){
-        const product = await models.Product.findByPk(id)
-        if(!product){
+    update: async function(productId:number, changes: any){
+        const productToUpdate = await productModel.findOneBy({id:productId})
+        if(!productToUpdate){
             throw boom.notFound('product to update not found')
         }
-        product?.update(changes)
-        return product
+        const newProduct = { ...productToUpdate, ...changes }
+        const result = await productModel.save(newProduct)
+        return result 
     },
-    delete: async function(id:number|string){
-        const product = await models.Product.findByPk(id)
+    delete: async function(productId:number){
+        const product = await productModel.findOneBy({id:productId})
         if(!product){
             throw boom.notFound('product to delete not found')
         }
-        product?.destroy()
-        return { id }
+        await productModel.remove(product)
+        return { productId }
     }
 }
 

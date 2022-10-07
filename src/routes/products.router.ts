@@ -21,7 +21,7 @@ router.get('/', async(req:Request, res:Response, next:NextFunction) => {
 
 router.get('/:id', validatorHandler(getProductSchema, 'params'),  async(req:Request, res:Response, next:NextFunction) => {
   try {
-    const { id } = req.params
+    let id = parseInt(req.params.id)
     const product = await productService.findOne(id);
     res.json({
       products: product
@@ -45,9 +45,8 @@ router.post('/', upload.single('image'), validatorHandler(createProductSchema, '
 
 router.patch('/:id', upload.single('image'), validatorHandler(getProductSchema, 'params'), validatorHandler(updateProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    const { id } = req.params
+    let id = parseInt(req.params.id)
     const changes = req.body
-    
     const product = await productService.update(id, changes);
     res.json({
       product: product
@@ -59,7 +58,7 @@ router.patch('/:id', upload.single('image'), validatorHandler(getProductSchema, 
 
 router.delete('/:id', validatorHandler(getProductSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    const { id } = req.params
+    let id = parseInt(req.params.id)
     const productId = await productService.delete(id);
     res.json({
       product: productId
