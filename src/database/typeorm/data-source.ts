@@ -1,5 +1,6 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
+import { origin1665260842693 } from "./migrations/1665260842693-origin" //import your first migration
 
 import { Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod } from "./entities"
 import { PaymentPaypal } from './entities/paymentMethods'
@@ -11,14 +12,16 @@ export const AppDataSource = new DataSource({
     username: "root",
     password: "",
     database: "ecommerce_dashboard",
-    synchronize: true,
+    // migrationsRun: true,
+    // synchronize: true,
     logging: false,
     entities: [
         Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod,
         PaymentPaypal
     ],
     subscribers: [],
-    migrations: [],
+    migrations: [origin1665260842693],
+    // migrationsTableName: "custom_migration_table",
 })
 
 

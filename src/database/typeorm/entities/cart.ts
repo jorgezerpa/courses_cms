@@ -9,7 +9,6 @@ export class Cart {
     @Column()
     merchantId?: number
 
-    
     @Column()
     totalAmount?: number
     
