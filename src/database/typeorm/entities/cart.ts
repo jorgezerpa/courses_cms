@@ -1,22 +1,17 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
-export class Product {
+export class Cart {
     @PrimaryGeneratedColumn()
     id?: number
 
     @Column()
-    name?: string
-
-    @Column()
-    description?: string
-
-    @Column()
-    price?: number
-
-    @Column()
-    quantity?: string
-    
-    @Column()
     merchantId?: number
+
+    @Column()
+    clientId?: number
+
+    @Column()
+    totalAmount?: number
+
 }
