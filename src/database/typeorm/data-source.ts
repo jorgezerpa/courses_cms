@@ -1,8 +1,7 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 
-import { Product, Auth, Cart, Category, Client, Merchant, Order, PaymentMethod } from "./entities"
-import { CategoryProduct, ClientPayment, MerchantPayment, OrderProduct } from './entities/unionTables'
+import { Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod } from "./entities"
 import { PaymentPaypal } from './entities/paymentMethods'
 
 export const AppDataSource = new DataSource({
@@ -15,8 +14,7 @@ export const AppDataSource = new DataSource({
     synchronize: true,
     logging: false,
     entities: [
-        Product, Auth, Cart, Category, Client, Merchant, Order, PaymentMethod,
-        CategoryProduct, ClientPayment, MerchantPayment, OrderProduct,
+        Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod,
         PaymentPaypal
     ],
     subscribers: [],

@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm"
+import { Order } from "./order"
+import { Category } from "./category"
 
 @Entity()
 export class Product {
@@ -19,4 +21,10 @@ export class Product {
     
     @Column()
     merchantId?: number
+
+    @ManyToMany(() => Order, (order) => order.products)
+    orders?: Order[]
+
+    @ManyToMany(() => Category, (category) => category.products)
+    categories?: Category[]
 }

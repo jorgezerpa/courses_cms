@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm"
+import { Client } from "./client"
+import { Merchant } from "./merchant"
 
 @Entity()
 export class PaymentMethod {
@@ -7,4 +9,10 @@ export class PaymentMethod {
 
     @Column()
     name?: string
+
+    @ManyToMany(() => Client, (client) => client.paymentMethods)
+    clients?: Client[]
+    
+    @ManyToMany(() => Merchant, (merchant) => merchant.paymentMethods)
+    merchants?: Merchant[]
 }

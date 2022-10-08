@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { Client } from "./client"
+import { Merchant } from "./merchant" 
 
 @Entity()
-export class Auth {
+export class AuthMerchant {
     @PrimaryGeneratedColumn()
     id?: number
 
@@ -15,8 +15,8 @@ export class Auth {
     @Column()
     password?: string
 
-    @OneToOne(() => Client, (client) => client.auth)
+    @OneToOne(() => Merchant, (merchant) => merchant.auth)
     @JoinColumn() 
-    client?: Client
+    merchant?: Merchant
 
 }
