@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, Relation } from "typeorm"
+import { Cart } from "./cart"
+
 
 @Entity()
 export class Client {
@@ -6,7 +8,7 @@ export class Client {
     id?: number
 
     @Column()
-    firtName?: string
+    firstName?: string
 
     @Column()
     lastName?: string
@@ -17,4 +19,6 @@ export class Client {
     @Column()
     phone?: number
 
+    @OneToOne(() => Cart, (cart) => cart.client)
+    cart?: Relation<Cart>
 }

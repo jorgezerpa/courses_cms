@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation } from "typeorm"
+import { Client } from "./client"
 
 @Entity()
 export class Cart {
@@ -8,10 +9,11 @@ export class Cart {
     @Column()
     merchantId?: number
 
-    @Column()
-    clientId?: number
-
+    
     @Column()
     totalAmount?: number
-
+    
+    @OneToOne(() => Client, (client)=>client.cart)
+    @JoinColumn()
+    client?: Relation<Client>
 }
