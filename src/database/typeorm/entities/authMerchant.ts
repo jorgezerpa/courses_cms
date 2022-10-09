@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation } from "typeorm"
 import { Merchant } from "./merchant" 
 
 @Entity()
@@ -17,6 +17,6 @@ export class AuthMerchant {
 
     @OneToOne(() => Merchant, (merchant) => merchant.auth)
     @JoinColumn() 
-    merchant?: Merchant
+    merchant?: Relation<Merchant>
 
 }

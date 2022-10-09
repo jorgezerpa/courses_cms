@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany, ManyToMany, JoinTable } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany, ManyToMany, JoinTable, Relation } from "typeorm"
 import { AuthMerchant } from "./authMerchant"
 import { Order } from "./order"
 import { PaymentMethod } from "./paypmentMethod"
@@ -23,8 +23,8 @@ export class Merchant {
     @Column()
     phone?: number
 
-    @OneToOne(() => AuthMerchant, (authMerchant) => authMerchant.merchant)
-    auth?: AuthMerchant 
+    @OneToOne(() => AuthMerchant, (authMerchant) => authMerchant.merchant,  { cascade: true })
+    auth?: Relation<AuthMerchant> 
 
     @OneToMany(() => Order, (order) => order.merchant) 
     order?: Order[]
