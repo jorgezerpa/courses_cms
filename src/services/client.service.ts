@@ -2,7 +2,7 @@ import boom from "@hapi/boom"
 import { Client } from "../database/typeorm/entities/client"
 import { Auth } from "../database/typeorm/entities"
 import AppDataSource from "../database/typeorm"
-import { hashPassword } from "../libs/bcrypt/hash-password"
+import encrypt from "../utils/bcrypt"
 
 const clientModel = AppDataSource.getRepository(Client)
 
@@ -30,7 +30,7 @@ const clientService = {
         client.username = data.username;
         
         const auth = new Auth()
-        auth.password = await hashPassword(password);
+        auth.password = await encrypt.hashPassword(password);
         auth.email = data.email;
         auth.username = data.username;
 

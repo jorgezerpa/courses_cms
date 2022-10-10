@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import routerApi from './routes';
+import authInit from "./utils/auth";
 
 // const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 import { logErrors, errorHandler } from './middlewares/error.handler'
@@ -10,6 +11,7 @@ const port:number = 3000;
 app.use(express.json()); 
 app.use(express.urlencoded({extended:false}))
 
+authInit()
 routerApi(app);
 
 app.use(logErrors);

@@ -5,7 +5,7 @@ import { Order } from "./order";
 import { Client } from "./client";
 import { Merchant } from "./merchant";
 import { PaymentMethod } from "./paypmentMethod";
-import { Auth } from "./auth";
+import { Auth }  from "./auth";
 import { AuthMerchant } from "./authMerchant";
 
 export  {

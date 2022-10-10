@@ -2,7 +2,7 @@ import boom from "@hapi/boom"
 import { Merchant } from "../database/typeorm/entities/merchant"
 import { AuthMerchant as Auth } from "../database/typeorm/entities"
 import AppDataSource from "../database/typeorm"
-import { hashPassword } from "../libs/bcrypt/hash-password"
+import encrypt from "../utils/bcrypt"
 
 const merchantModel = AppDataSource.getRepository(Merchant)
 // const authModel = AppDataSource.getRepository(Auth)
@@ -31,7 +31,7 @@ const merchantService = {
         merchant.username = data.username;
         
         const auth = new Auth()
-        auth.password = await hashPassword(password);
+        auth.password = await encrypt.hashPassword(password);
         auth.email = data.email;
         auth.username = data.username;
 
