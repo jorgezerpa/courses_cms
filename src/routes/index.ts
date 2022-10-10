@@ -3,6 +3,7 @@ import express, { Application } from "express"
 import productsRouter from './products.router'
 import categoriesRouter from './categories.router'
 import merchantsRouter from './merchants.router'
+import clientsRouter from './clients.router'
 
 function routerApi(app:Application) {
   const router = express.Router();
@@ -10,6 +11,7 @@ function routerApi(app:Application) {
   router.use('/products', productsRouter);
   router.use('/categories', categoriesRouter);
   router.use('/merchants', merchantsRouter);
+  router.use('/clients', clientsRouter);
 }
 
 export default routerApi;

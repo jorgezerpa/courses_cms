@@ -22,7 +22,7 @@ export class Client {
     email?: string
     
     @Column()
-    phone?: number
+    phone?: string
 
     @OneToOne(() => Cart, (cart) => cart.client)
     cart?: Relation<Cart>
@@ -30,7 +30,7 @@ export class Client {
     @OneToMany(() => Order, (order) => order.client) 
     order?: Order[]
 
-    @OneToOne(() => Auth, (auth) => auth.client)
+    @OneToOne(() => Auth, (auth) => auth.client, { cascade:true})
     auth?: Auth 
 
     @ManyToMany(() => PaymentMethod, (paymentMethod) => paymentMethod.clients)

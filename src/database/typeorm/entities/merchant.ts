@@ -21,7 +21,7 @@ export class Merchant {
     email?: string
     
     @Column()
-    phone?: number
+    phone?: string
 
     @OneToOne(() => AuthMerchant, (authMerchant) => authMerchant.merchant,  { cascade: true })
     auth?: Relation<AuthMerchant> 

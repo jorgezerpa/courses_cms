@@ -8,7 +8,7 @@ const email=Joi.string().min(3).max(30);
 const password=Joi.string().min(3).max(30);
 const phone=Joi.string().min(3).max(30);
 
-const createMerchantSchema=Joi.object({
+const createClientSchema=Joi.object({
     firstName: firstName.required(),
     lastName: lastName.required(),
     username: userName.required(),
@@ -17,7 +17,7 @@ const createMerchantSchema=Joi.object({
     password: password.required()
 });
 
-const updateMerchantSchema=Joi.object({
+const updateClientSchema=Joi.object({
     firstName: firstName.required(),
     lastName: lastName.required(),
     userName: userName.required(),
@@ -25,8 +25,8 @@ const updateMerchantSchema=Joi.object({
     phone: phone.required(),
 });
 
-const getMerchantSchema=Joi.object({
+const getClientSchema=Joi.object({
     id:id.required(),
 });
 
-export {createMerchantSchema,updateMerchantSchema,getMerchantSchema}
+export {createClientSchema,updateClientSchema,getClientSchema}
