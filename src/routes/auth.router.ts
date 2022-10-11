@@ -8,11 +8,10 @@ router.post('/login',
   async (req:Request, res:Response, next:NextFunction) => {
     try {
         const payload = {
-            something: '10'
+          user: req.user 
         }
-        const secret = 'soy un secreto super seguro yeaahhh'
-        const token = jwt.sign(payload, secret)
-        res.json({token});
+        const token = jwt.sign(payload, 'secreto')
+        res.json({token, user:req.user});
     } catch (error) {
       next(error);
     }

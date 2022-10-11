@@ -14,8 +14,8 @@ const authService = {
         
         if(!auth){
             throw boom.notFound('auth not found')
-        }
-        return auth    
+        }  
+        return auth
     },
 }
 

@@ -1,6 +1,9 @@
+import dotenv from "dotenv"
 import express, { Application } from "express";
 import routerApi from './routes';
 import authInit from "./utils/auth";
+
+dotenv.config()
 
 // const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 import { logErrors, errorHandler } from './middlewares/error.handler'
