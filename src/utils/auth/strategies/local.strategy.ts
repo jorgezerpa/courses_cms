@@ -3,6 +3,7 @@ import { Strategy } from 'passport-local';
 import boom from '@hapi/boom';
 import encrypt from '../../bcrypt'; 
 import authService from '../../../services/auth.service';
+import { UserType } from '../../../types/user.type';
 
 const LocalStrategy = new Strategy({
    usernameField: 'email',
@@ -22,6 +23,7 @@ const LocalStrategy = new Strategy({
            done(boom.unauthorized(), false);
          }
          delete user.password
+         user.userType = body.userType
          done(null, user);
      }
    } catch (error) {

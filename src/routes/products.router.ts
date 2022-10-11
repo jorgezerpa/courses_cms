@@ -1,7 +1,9 @@
 import express, { Router, Response, Request, NextFunction } from 'express'
+import passport from "passport"
 import productService from '../services/products.service'
 import { createProductSchema, updateProductSchema, getProductSchema } from '../schemas/product.schema'
 import validatorHandler from '../middlewares/validator.handler'
+import { checkRoles } from '../middlewares/authorization.handler'
 
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
@@ -31,7 +33,7 @@ router.get('/:id', validatorHandler(getProductSchema, 'params'),  async(req:Requ
   }
 });
 
-router.post('/', upload.single('image'), validatorHandler(createProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
+router.post('/', passport.authenticate('jwt', {session:false}), checkRoles(['merchant']), upload.single('image'), validatorHandler(createProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const data = req.body
     const product = await productService.create(data);
