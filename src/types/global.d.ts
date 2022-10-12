@@ -3,6 +3,11 @@ export {};
 type databaseType = 'mysql'
 
 declare global {
+  namespace Express {
+    interface User {
+      id: number;
+    }
+  }
   namespace NodeJS {
     interface ProcessEnv {
         PORT:string;

@@ -1,4 +1,4 @@
-import express, { Router, Response, Request, NextFunction } from 'express'
+import express, { Router, Response, Request, NextFunction, Express } from 'express'
 import passport from "passport"
 import productService from '../services/products.service'
 import { createProductSchema, updateProductSchema, getProductSchema } from '../schemas/product.schema'
@@ -12,6 +12,7 @@ const router:Router = express.Router();
 
 router.get('/', async(req:Request, res:Response, next:NextFunction) => {
   try {
+    
     const products = await productService.get();
     res.json({
       products: products
@@ -36,6 +37,7 @@ router.get('/:id', validatorHandler(getProductSchema, 'params'),  async(req:Requ
 router.post('/', passport.authenticate('jwt', {session:false}), checkRoles(['merchant']), upload.single('image'), validatorHandler(createProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const data = req.body
+    data.merchantId = req.user?.id
     const product = await productService.create(data);
     res.json({
       product: product
@@ -45,11 +47,14 @@ router.post('/', passport.authenticate('jwt', {session:false}), checkRoles(['mer
   }
 });
 
-router.patch('/:id', upload.single('image'), validatorHandler(getProductSchema, 'params'), validatorHandler(updateProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
+router.patch('/:id', passport.authenticate('jwt', {session:false}), checkRoles(['merchant']), upload.single('image'), validatorHandler(getProductSchema, 'params'), validatorHandler(updateProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    let id = parseInt(req.params.id)
-    const changes = req.body
-    const product = await productService.update(id, changes);
+    let productId = parseInt(req.params.id)
+    const user = req.user;
+    const changes = req.body;
+    let userId = user?.id;
+    changes.merchantId = userId;
+    const product = await productService.update(productId, userId, changes);
     res.json({
       product: product
     });
@@ -58,10 +63,11 @@ router.patch('/:id', upload.single('image'), validatorHandler(getProductSchema, 
   }
 });
 
-router.delete('/:id', validatorHandler(getProductSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
+router.delete('/:id',  passport.authenticate('jwt', {session:false}), checkRoles(['merchant']), validatorHandler(getProductSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     let id = parseInt(req.params.id)
-    const productId = await productService.delete(id);
+    const userId = req.user?.id as number;
+    const productId = await productService.delete(id, userId);
     res.json({
       product: productId
     });

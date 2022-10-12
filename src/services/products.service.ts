@@ -1,6 +1,7 @@
 import boom from "@hapi/boom"
 import { Product } from "../database/typeorm/entities/product"
 import AppDataSource from "../database/typeorm"
+import { Merchant } from "../database/typeorm/entities"
 
 const productModel = AppDataSource.getRepository(Product)
 
@@ -29,19 +30,25 @@ const productService = {
         }
         return newProduct
     },
-    update: async function(productId:number, changes: any){
+    update: async function(productId:number, merchantId:any, changes: any){
         const productToUpdate = await productModel.findOneBy({id:productId})
         if(!productToUpdate){
             throw boom.notFound('product to update not found')
+        }
+        if(productToUpdate.merchantId!==merchantId){
+            throw boom.unauthorized('not your product')
         }
         const newProduct = { ...productToUpdate, ...changes }
         const result = await productModel.save(newProduct)
         return result 
     },
-    delete: async function(productId:number){
+    delete: async function(productId:number, merchantId:number){
         const product = await productModel.findOneBy({id:productId})
         if(!product){
             throw boom.notFound('product to delete not found')
+        }
+        if(product.merchantId!==merchantId){
+            throw boom.unauthorized('not your product')
         }
         await productModel.remove(product)
         return { productId }

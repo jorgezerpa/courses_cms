@@ -12,7 +12,6 @@ const createProductSchema=Joi.object({
     description: description.required(),
     price: price.required(),
     quantity: quantity.required(),
-    merchantId: merchantId.required(),
 });
 
 const updateProductSchema=Joi.object({
@@ -20,7 +19,6 @@ const updateProductSchema=Joi.object({
     description: description.required(),
     price: price.required(),
     quantity: quantity.required(),
-    merchantId: merchantId.required(),
 });
 
 const getProductSchema=Joi.object({
