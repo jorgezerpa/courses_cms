@@ -15,7 +15,7 @@ export class AuthMerchant {
     @Column()
     password?: string
 
-    @OneToOne(() => Merchant, (merchant) => merchant.auth)
+    @OneToOne(() => Merchant, (merchant) => merchant.auth, { onDelete:"CASCADE" })
     @JoinColumn() 
     merchant?: Relation<Merchant>
 

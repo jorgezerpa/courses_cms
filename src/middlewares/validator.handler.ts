@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import Joi, { ObjectSchema } from 'joi'
 import boom from "@hapi/boom";
 
-type Property = 'body'|'header'|'params';
+type Property = 'body'|'header'|'params'|'query';
 
 function validatorHandler(schema:ObjectSchema,property:Property){
     return(req:Request, res: Response, next: NextFunction)=>{

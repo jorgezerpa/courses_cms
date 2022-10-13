@@ -5,6 +5,7 @@ import boom from '@hapi/boom'
 function checkRoles(roles:UserType[]) {
     return (req:Request, res:Response, next:NextFunction) => {
       const user = req.user;
+      console.log('heeeeyyyyyyyyyyy',user)
       // @ts-ignore
       if (roles.includes(user.userType)) {
         next();

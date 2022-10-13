@@ -14,10 +14,10 @@ export class Merchant {
     @Column()
     lastName?: string
 
-    @Column()
+    @Column({unique:true})
     username?: string
 
-    @Column()
+    @Column({unique:true})
     email?: string
     
     @Column()
@@ -26,10 +26,10 @@ export class Merchant {
     @OneToOne(() => AuthMerchant, (authMerchant) => authMerchant.merchant,  { cascade: true })
     auth?: Relation<AuthMerchant> 
 
-    @OneToMany(() => Order, (order) => order.merchant) 
+    @OneToMany(() => Order, (order) => order.merchant, { cascade: true }) 
     order?: Order[]
 
-    @ManyToMany(() => PaymentMethod, (paymentMethod) => paymentMethod.merchants)
+    @ManyToMany(() => PaymentMethod, (paymentMethod) => paymentMethod.merchants, {cascade:true})
     @JoinTable()
     paymentMethods?: PaymentMethod[]
 }

@@ -21,8 +21,16 @@ const updateProductSchema=Joi.object({
     quantity: quantity.required(),
 });
 
+const filterProductSchema=Joi.object({
+    name:name,
+    description: description,
+    price: price,
+    quantity: quantity,
+    merchantId: merchantId,
+});
+
 const getProductSchema=Joi.object({
     id:id.required(),
 });
 
-export {createProductSchema,updateProductSchema,getProductSchema}
+export {createProductSchema,updateProductSchema,getProductSchema, filterProductSchema}

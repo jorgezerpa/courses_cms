@@ -5,7 +5,7 @@ import AppDataSource from "../database/typeorm"
 import encrypt from "../utils/bcrypt"
 
 const merchantModel = AppDataSource.getRepository(Merchant)
-// const authModel = AppDataSource.getRepository(Auth)
+
 
 const merchantService = {
     get: async function(){
@@ -41,6 +41,7 @@ const merchantService = {
         if(!newMerchant){
             throw boom.badRequest('Can not create the merchant')
         }
+        delete newMerchant.auth
         return newMerchant
     },
     update: async function(merchantId:number, changes: any){

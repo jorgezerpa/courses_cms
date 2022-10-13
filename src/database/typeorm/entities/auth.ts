@@ -15,7 +15,7 @@ export class Auth {
     @Column()
     password?: string
 
-    @OneToOne(() => Client, (client) => client.auth)
+    @OneToOne(() => Client, (client) => client.auth, { onDelete: 'CASCADE' })
     @JoinColumn() 
     client?: Client
 

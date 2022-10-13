@@ -1,13 +1,12 @@
 import boom from "@hapi/boom"
 import { Product } from "../database/typeorm/entities/product"
 import AppDataSource from "../database/typeorm"
-import { Merchant } from "../database/typeorm/entities"
 
 const productModel = AppDataSource.getRepository(Product)
 
 const productService = {
-    get: async function(){
-        const result = await productModel.find()
+    get: async function(query:any){
+        const result = await productModel.find({where: query})
         if(!result){
             throw boom.notFound('products not found')
         }

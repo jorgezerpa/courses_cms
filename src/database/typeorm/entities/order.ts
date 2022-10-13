@@ -17,7 +17,7 @@ export class Order {
     @ManyToOne(() => Client, (client) => client.order)
     client?: Client 
 
-    @ManyToOne(() => Client, (client) => client.order)
+    @ManyToOne(() => Client, (client) => client.order, { onDelete: 'CASCADE' })
     merchant?: Merchant 
 
     @ManyToMany(() => Product, (product) => product.orders)

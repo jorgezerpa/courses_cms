@@ -9,13 +9,13 @@ const authMerchantModel = AppDataSource.getRepository(AuthMerchant)
 const authService = {
     findOneByEmail: async function(email: string, userType:string){
         let auth:any
-        if(userType === 'client') auth = await authClientModel.findOneBy({ email:email })
-        if(userType === 'merchant') auth = await authMerchantModel.findOneBy({email:email})
+        if(userType === 'client') auth = await authClientModel.find({where: { email:email }, relations:{client:true} })
+        if(userType === 'merchant') auth = await authMerchantModel.find({where: { email:email }, relations:{merchant:true} })
         
-        if(!auth){
+        if(!auth[0]){
             throw boom.notFound('auth not found')
         }  
-        return auth
+        return auth[0]
     },
 }
 

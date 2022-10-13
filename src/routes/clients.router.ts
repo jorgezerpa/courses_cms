@@ -1,27 +1,30 @@
 import express, { Router, Response, Request, NextFunction } from 'express'
+import passport from "passport"
 import clientService from '../services/client.service'
 import { createClientSchema, updateClientSchema, getClientSchema } from '../schemas/client.schema'
 import validatorHandler from '../middlewares/validator.handler'
+import { checkRoles } from '../middlewares/authorization.handler'
 
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
 
 const router:Router = express.Router();
 
-router.get('/', async(req:Request, res:Response, next:NextFunction) => {
-  try {
-    const client = await clientService.get();
-    res.json({
-      clients: client
-    });
-  } catch (error) {
-    next(error)
-  }
-});
+// router.get('/', async(req:Request, res:Response, next:NextFunction) => {
+//   try {
+//     const client = await clientService.get();
+//     res.json({
+//       clients: client
+//     });
+//   } catch (error) {
+//     next(error)
+//   }
+// });
 
-router.get('/:id', validatorHandler(getClientSchema, 'params'),  async(req:Request, res:Response, next:NextFunction) => {
+router.get('/', passport.authenticate('jwt', {session:false}), checkRoles(['client']),  async(req:Request, res:Response, next:NextFunction) => {
   try {
-    let id = parseInt(req.params.id)
+    let id = req.user?.id as number
+    console.log(id)
     const client = await clientService.findOne(id);
     res.json({
       client: client
@@ -43,9 +46,9 @@ router.post('/', upload.single('image'), validatorHandler(createClientSchema, 'b
   }
 });
 
-router.patch('/:id', upload.single('image'), validatorHandler(getClientSchema, 'params'), validatorHandler(updateClientSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
+router.patch('/', passport.authenticate('jwt', {session:false}), checkRoles(['client']), upload.single('image'), validatorHandler(updateClientSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    let id = parseInt(req.params.id)
+    let id = req.user?.id as number
     const changes = req.body
     const client = await clientService.update(id, changes);
     res.json({
@@ -56,9 +59,9 @@ router.patch('/:id', upload.single('image'), validatorHandler(getClientSchema, '
   }
 });
 
-router.delete('/:id', validatorHandler(getClientSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
+router.delete('',passport.authenticate('jwt', {session:false}), checkRoles(['client']), upload.single('image'), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    let id = parseInt(req.params.id)
+    let id = req.user?.id as number
     const clientId = await clientService.delete(id);
     res.json({
       client: clientId

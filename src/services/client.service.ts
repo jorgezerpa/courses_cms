@@ -6,6 +6,7 @@ import encrypt from "../utils/bcrypt"
 
 const clientModel = AppDataSource.getRepository(Client)
 
+
 const clientService = {
     get: async function(){
         const result = await clientModel.find()
@@ -40,6 +41,7 @@ const clientService = {
         if(!newClient){
             throw boom.badRequest('Can not create the client')
         }
+        delete newClient.auth
         return newClient
     },
     update: async function(clientId:number, changes: any){

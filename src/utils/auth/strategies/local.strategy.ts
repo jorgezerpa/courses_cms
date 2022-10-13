@@ -1,9 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request } from 'express';
 import { Strategy } from 'passport-local';
 import boom from '@hapi/boom';
 import encrypt from '../../bcrypt'; 
 import authService from '../../../services/auth.service';
-import { UserType } from '../../../types/user.type';
 
 const LocalStrategy = new Strategy({
    usernameField: 'email',
@@ -23,8 +22,9 @@ const LocalStrategy = new Strategy({
            done(boom.unauthorized(), false);
          }
          delete user.password
-         user.userType = body.userType
-         done(null, user);
+         //user['merchant'].usertype || user['client'].usertype
+         user[body.userType].userType = body.userType
+         done(null, user[body.userType]);
      }
    } catch (error) {
      done(error, false);

@@ -9,7 +9,7 @@ export class Client {
     @PrimaryGeneratedColumn()
     id?: number
 
-    @Column()
+    @Column({unique:true})
     username?: string
 
     @Column()
@@ -18,22 +18,22 @@ export class Client {
     @Column()
     lastName?: string
 
-    @Column()
+    @Column({unique:true})
     email?: string
     
     @Column()
     phone?: string
 
-    @OneToOne(() => Cart, (cart) => cart.client)
+    @OneToOne(() => Cart, (cart) => cart.client, { cascade:true })
     cart?: Relation<Cart>
 
-    @OneToMany(() => Order, (order) => order.client) 
+    @OneToMany(() => Order, (order) => order.client, { cascade:true }) 
     order?: Order[]
 
     @OneToOne(() => Auth, (auth) => auth.client, { cascade:true})
     auth?: Auth 
 
-    @ManyToMany(() => PaymentMethod, (paymentMethod) => paymentMethod.clients)
+    @ManyToMany(() => PaymentMethod, (paymentMethod) => paymentMethod.clients, { cascade:true })
     @JoinTable()
     paymentMethods?: PaymentMethod[]
 }

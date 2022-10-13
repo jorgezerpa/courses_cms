@@ -13,6 +13,6 @@ export class PaymentMethod {
     @ManyToMany(() => Client, (client) => client.paymentMethods)
     clients?: Client[]
     
-    @ManyToMany(() => Merchant, (merchant) => merchant.paymentMethods)
+    @ManyToMany(() => Merchant, (merchant) => merchant.paymentMethods, {onDelete: 'CASCADE'})
     merchants?: Merchant[]
 }
