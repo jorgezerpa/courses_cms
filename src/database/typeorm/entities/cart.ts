@@ -1,5 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinTable, JoinColumn, Relation, ManyToMany } from "typeorm"
 import { Client } from "./client"
+import { Merchant } from "./merchant"
+import { Product } from "./product"
 
 @Entity()
 export class Cart {
@@ -7,12 +9,17 @@ export class Cart {
     id?: number
 
     @Column()
-    merchantId?: number
-
-    @Column()
     totalAmount?: number
     
-    @OneToOne(() => Client, (client)=>client.cart)
+    @OneToOne(() => Client, (client)=>client.cart, { nullable: false, cascade:true })
     @JoinColumn()
     client?: Relation<Client>
+    
+    @OneToOne(() => Merchant, { nullable: false, cascade:true })
+    @JoinColumn()
+    merchant?: Relation<Merchant>
+
+    @ManyToMany(()=>Product, (product)=>product.carts, {cascade:true})
+    @JoinTable()
+    products?:Product[]
 }

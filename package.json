@@ -7,7 +7,7 @@
     "start": "node/dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc -p .",
-    "migrate:generate:first": "npx typeorm-ts-node-esm migration:generate ./src/database/typeorm/migrations/origin -d ./src/database/typeorm/data-source.ts",
+    "migrate:generate": "npx typeorm-ts-node-esm migration:generate ./src/database/typeorm/migrations/origin -d ./src/database/typeorm/data-source.ts",
     "migrate:run": "npx typeorm-ts-node-esm -d ./src/database/typeorm/data-source.ts migration:run",
     "migrate:revert": "npx typeorm-ts-node-esm -d ./src/database/typeorm/data-source.ts migration:revert"
   },

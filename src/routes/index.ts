@@ -5,6 +5,7 @@ import categoriesRouter from './categories.router'
 import merchantsRouter from './merchants.router'
 import clientsRouter from './clients.router'
 import authRouter from './auth.router'
+import cartRouter from './cart.router'
 
 function routerApi(app:Application) {
   const router = express.Router();
@@ -13,6 +14,7 @@ function routerApi(app:Application) {
   router.use('/categories', categoriesRouter);
   router.use('/merchants', merchantsRouter);
   router.use('/clients', clientsRouter);
+  router.use('/cart', cartRouter);
   router.use('/auth', authRouter);
 }
 

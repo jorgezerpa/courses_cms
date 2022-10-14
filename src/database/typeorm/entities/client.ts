@@ -24,7 +24,7 @@ export class Client {
     @Column()
     phone?: string
 
-    @OneToOne(() => Cart, (cart) => cart.client, { cascade:true })
+    @OneToOne(() => Cart, (cart) => cart.client )
     cart?: Relation<Cart>
 
     @OneToMany(() => Order, (order) => order.client, { cascade:true }) 
