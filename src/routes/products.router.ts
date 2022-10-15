@@ -10,11 +10,11 @@ const upload = multer({ dest: 'uploads/' })
 
 const router:Router = express.Router();
 
-router.get('/', validatorHandler(filterProductSchema, 'query'), async(req:Request, res:Response, next:NextFunction) => {
+router.get('/', passport.authenticate('jwt', {session:false}), checkRoles(['client', 'merchant']), validatorHandler(filterProductSchema, 'query'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const query = req.query;
-    console.log(query)
-    const products = await productService.get({...query});
+    const userId = req.user?.id
+    const products = await productService.get({...query, merchantId: userId});
     res.json({
       products: products
     });

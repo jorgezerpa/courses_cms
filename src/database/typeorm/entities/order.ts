@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable, OneToOne, JoinColumn } from "typeorm"
 import { Client } from "./client"
 import { Merchant } from "./merchant"
 import { Product } from "./product"
+import { Shipping } from './shipping'
 
 @Entity()
 export class Order {
@@ -9,10 +10,14 @@ export class Order {
     id?: number
     
     @Column()
-    paymentMethodId?: number
+    paymentMethodId?: string
 
     @Column()
     totalAmount?: number
+
+    @OneToOne(()=>Shipping, {cascade:true})
+    @JoinColumn()
+    shipping?:Shipping
 
     @ManyToOne(() => Client, (client) => client.order)
     client?: Client 

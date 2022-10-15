@@ -7,6 +7,7 @@ import { Merchant } from "./merchant";
 import { PaymentMethod } from "./paypmentMethod";
 import { Auth }  from "./auth";
 import { AuthMerchant } from "./authMerchant";
+import { Shipping } from "./shipping";
 
 export  {
     Product,
@@ -18,6 +19,7 @@ export  {
     PaymentMethod,
     Auth,
     AuthMerchant,
+    Shipping
 }
 
 

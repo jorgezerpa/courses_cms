@@ -6,9 +6,10 @@ import { DataSource } from "typeorm"
 // import { origin1665684392493 } from './migrations/1665684392493-origin'
 // import { origin1665684591936 } from './migrations/1665684591936-origin'
 // import { origin1665740651259 } from './migrations/1665740651259-origin'
-import { origin1665740904017 } from './migrations/1665740904017-origin'
+// import { origin1665740904017 } from './migrations/1665740904017-origin'
+import { origin1665779692150 } from './migrations/1665779692150-origin'
 
-import { Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod } from "./entities"
+import { Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod, Shipping } from "./entities"
 import { PaymentPaypal } from './entities/paymentMethods'
 
 export const AppDataSource = new DataSource({
@@ -22,11 +23,11 @@ export const AppDataSource = new DataSource({
     // synchronize: true,
     logging: false,
     entities: [
-        Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod,
+        Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod, Shipping,
         PaymentPaypal
     ],
     subscribers: [],
-    migrations: [origin1665740904017],
+    migrations: [origin1665779692150],
     // migrationsTableName: "custom_migration_table",
 })
 
