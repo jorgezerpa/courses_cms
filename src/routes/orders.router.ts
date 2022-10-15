@@ -25,11 +25,10 @@ router.post('/', passport.authenticate('jwt', {session:false}), checkRoles(['cli
 
 router.get('/', passport.authenticate('jwt', {session:false}), checkRoles(['client']), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    //@ts-ignore
     let userId = req.user?.id as number
-    const order = await orderService.findOne(userId);
+    const orders = await orderService.list(userId);
     res.json({
-      orders: order
+      orders: orders
     });
   } catch (error) {
     next(error)
@@ -38,11 +37,11 @@ router.get('/', passport.authenticate('jwt', {session:false}), checkRoles(['clie
 
 
 
-router.delete('',  passport.authenticate('jwt', {session:false}), checkRoles(['client']), async(req:Request, res:Response, next:NextFunction) => {
+router.delete('/:orderId',  passport.authenticate('jwt', {session:false}), checkRoles(['client']), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    //@ts-ignore
+    const orderId = parseInt(req.params.orderId)
     const userId = req.user?.id as number;
-    const result = await orderService.delete(userId);
+    const result = await orderService.delete(userId, orderId);
     res.json({result});
   } catch (error) {
     next(error)
