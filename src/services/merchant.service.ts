@@ -28,12 +28,10 @@ const merchantService = {
         merchant.firstName = data.firstName;
         merchant.email = data.email;
         merchant.phone = data.phone;
-        merchant.username = data.username;
         
         const auth = new Auth()
         auth.password = await encrypt.hashPassword(password);
         auth.email = data.email;
-        auth.username = data.username;
 
         merchant.auth = auth
 

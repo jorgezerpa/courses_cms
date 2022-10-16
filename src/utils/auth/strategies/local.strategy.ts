@@ -6,25 +6,22 @@ import authService from '../../../services/auth.service';
 
 const LocalStrategy = new Strategy({
    usernameField: 'email',
-   passwordField: 'password',
-   passReqToCallback: true
+   passwordField: 'password'
  },
- async ({body}:Request, email:string, password:string, done) => {
+ async (email:string, password:string, done) => {
    try {  
-     const user = await authService.findOneByEmail(email, body.userType);
-     if (!user) {
+     const merchant = await authService.findOneByEmail(email);
+     if (!merchant) {
        done(boom.unauthorized(), false);  
        return
      }
-     if(user.password!==undefined){
-         const isMatch = await encrypt.compare(password, user.password);
+     if(merchant.password!==undefined){
+         const isMatch = await encrypt.compare(password, merchant.password);
          if (!isMatch) {
            done(boom.unauthorized(), false);
          }
-         delete user.password
-         //user['merchant'].usertype || user['client'].usertype
-         user[body.userType].userType = body.userType
-         done(null, user[body.userType]);
+         delete merchant.password
+         done(null, merchant.merchant);
      }
    } catch (error) {
      done(error, false);

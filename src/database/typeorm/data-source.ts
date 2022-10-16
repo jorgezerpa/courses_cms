@@ -1,16 +1,14 @@
 import "reflect-metadata"
 import config from "../../config"
 import { DataSource } from "typeorm"
-// import { origin1665671382440 } from './migrations/1665671382440-origin'
-// import { origin1665684150899 } from './migrations/1665684150899-origin'
-// import { origin1665684392493 } from './migrations/1665684392493-origin'
-// import { origin1665684591936 } from './migrations/1665684591936-origin'
-// import { origin1665740651259 } from './migrations/1665740651259-origin'
-// import { origin1665740904017 } from './migrations/1665740904017-origin'
-import { origin1665779692150 } from './migrations/1665779692150-origin'
-
-import { Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod, Shipping } from "./entities"
+import { Product, AuthMerchant, Category, Merchant, PaymentMethod, Shipping } from "./entities"
 import { PaymentPaypal } from './entities/paymentMethods'
+import { origin1665928261208 } from './migrations/1665928261208-origin'
+import { origin1665930420939 } from './migrations/1665930420939-origin'
+import { origin1665930548474 } from './migrations/1665930548474-origin'
+import { origin1665932816241 } from './migrations/1665932816241-origin'
+import { origin1665933143168 } from './migrations/1665933143168-origin'
+import { origin1665946229822 } from './migrations/1665946229822-origin'
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -23,11 +21,12 @@ export const AppDataSource = new DataSource({
     // synchronize: true,
     logging: false,
     entities: [
-        Product, Auth, AuthMerchant, Cart, Category, Client, Merchant, Order, PaymentMethod, Shipping,
+        Product, AuthMerchant, Category, Merchant, PaymentMethod, Shipping,
         PaymentPaypal
     ],
     subscribers: [],
-    migrations: [origin1665779692150],
+    migrations: [origin1665928261208, origin1665930420939, origin1665930548474, origin1665932816241, origin1665933143168,
+    origin1665946229822],
     // migrationsTableName: "custom_migration_table",
 })
 

@@ -1,7 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm"
-import { Order } from "./order"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, ManyToOne } from "typeorm"
 import { Category } from "./category"
-import { Cart } from "./cart"
+import { Merchant } from "./merchant"
 
 @Entity()
 export class Product {
@@ -19,16 +18,10 @@ export class Product {
 
     @Column()
     quantity?: string
-    
-    @Column()
-    merchantId?: number
-
-    @ManyToMany(() => Order, (order) => order.products)
-    orders?: Order[]
 
     @ManyToMany(() => Category, (category) => category.products)
     categories?: Category[]
 
-    @ManyToMany(()=>Cart, (cart)=>cart.products)
-    carts?:Cart
+    @ManyToOne(() => Merchant, (merchant) => merchant.products, {cascade:true, onDelete:'CASCADE'})
+    merchant?: Merchant
 }

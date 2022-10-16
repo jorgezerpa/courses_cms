@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import express, { Application } from "express";
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import routerApi from './routes';
 import authInit from "./utils/auth";
@@ -10,7 +11,8 @@ dotenv.config()
 const app:Application = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.json()); 
+app.use(express.json()) 
+app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
 
 authInit()

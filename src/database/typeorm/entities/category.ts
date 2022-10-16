@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn, Relation } from "typeorm"
+import { Merchant } from "./merchant"
 import { Product } from "./product"
 
 @Entity()
@@ -15,4 +16,7 @@ export class Category {
     @ManyToMany(() => Product, (product) => product.categories)
     @JoinTable()
     products?: Product[]
+
+    @ManyToOne(() => Merchant, (merchant) => merchant.categories, {cascade:true, onDelete:'CASCADE'})
+    merchant?:Merchant
 }

@@ -1,56 +1,61 @@
 import boom from "@hapi/boom"
 import { Product } from "../database/typeorm/entities/product"
 import AppDataSource from "../database/typeorm"
+import { Merchant } from "../database/typeorm/entities"
 
 const productModel = AppDataSource.getRepository(Product)
+const merchantModel = AppDataSource.getRepository(Merchant)
 
 const productService = {
-    get: async function(query:any){
-        const result = await productModel.find({where: query})
-        if(!result){
-            throw boom.notFound('products not found')
-        }
-        if(result.length <= 0){
-            throw boom.notFound("not products created")
-        }
-        return result
+    get: async function(merchantId:number){
+        const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
+        if(!merchant) throw boom.notFound('user not found')
+        if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created")        
+        return merchant.products
     },
-    findOne: async function(productId: number){
-        const product = await productModel.findOneBy({id:productId})
-        if(!product){
-            throw boom.notFound('product not found')
-        }
+    findOne: async function(merchantId:number, productId: number){
+        const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
+        if(!merchant) throw boom.notFound('user not found')
+        if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created")        
+        const productIndex = merchant.products.findIndex(product=>product.id===productId)
+        if(productIndex===-1) throw boom.notFound('product not found')
+        const product = merchant.products[productIndex]
         return product    
     },
-    create: async function(data: Product){
-        const newProduct = await productModel.save(data)
-        if(!newProduct){
-            throw boom.badRequest('Can not create the product')
-        }
-        return newProduct
-    },
-    update: async function(productId:number, merchantId:any, changes: any){
-        const productToUpdate = await productModel.findOneBy({id:productId})
-        if(!productToUpdate){
-            throw boom.notFound('product to update not found')
-        }
-        if(productToUpdate.merchantId!==merchantId){
-            throw boom.unauthorized('not your product')
-        }
-        const newProduct = { ...productToUpdate, ...changes }
+    create: async function(merchantId:number, data: Product){
+        const merchant = await merchantModel.findOneBy({id:merchantId})
+        if(!merchant) throw boom.notFound('merchant not found')
+        const newProduct = new Product()
+        newProduct.name = data.name
+        newProduct.description = data.description
+        newProduct.price = data.price
+        newProduct.quantity = data.quantity
+        newProduct.merchant = merchant
         const result = await productModel.save(newProduct)
-        return result 
+        if(!result) throw boom.badRequest('Can not create the product')
+        return result
     },
-    delete: async function(productId:number, merchantId:number){
-        const product = await productModel.findOneBy({id:productId})
-        if(!product){
-            throw boom.notFound('product to delete not found')
-        }
-        if(product.merchantId!==merchantId){
-            throw boom.unauthorized('not your product')
-        }
-        await productModel.remove(product)
-        return { productId }
+    update: async function(merchantId:number, productId:number, changes: any){
+        const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
+        if(!merchant) throw boom.notFound('user not found')
+        if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created")        
+        const productIndex = merchant.products.findIndex(product=>product.id===productId)
+        if(productIndex===-1) throw boom.notFound('product not found')
+        const product = merchant.products[productIndex]
+        const updatedProduct = {...product, ...changes}
+        const result = await productModel.save(updatedProduct)
+        return result
+    },
+    delete: async function(merchantId:number, productId:number){
+        const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
+        if(!merchant) throw boom.notFound('user not found')
+        if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created")        
+        const productIndex = merchant.products.findIndex(product=>product.id===productId)
+        if(productIndex===-1) throw boom.notFound('product not found')
+        const product = merchant.products[productIndex]
+        const result = await productModel.remove(product)
+        return `product ${productId} deleted successfully`
+
     }
 }
 
