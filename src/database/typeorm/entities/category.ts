@@ -13,7 +13,7 @@ export class Category {
     @Column()
     description?: string
 
-    @ManyToMany(() => Product, (product) => product.categories)
+    @ManyToMany(() => Product, (product) => product.categories, {cascade:true})
     @JoinTable()
     products?: Product[]
 

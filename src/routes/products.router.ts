@@ -3,7 +3,6 @@ import passport from "passport"
 import productService from '../services/products.service'
 import { createProductSchema, updateProductSchema, getProductSchema } from '../schemas/product.schema'
 import validatorHandler from '../middlewares/validator.handler'
-import { checkRoles } from '../middlewares/authorization.handler'
 
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
@@ -14,6 +13,19 @@ router.get('/', passport.authenticate('jwt', {session:false}), async(req:Request
   try {
     const merchantId = req.user?.id as number
     const products = await productService.get(merchantId);
+    res.json({
+      products:products
+    });
+  } catch (error) {
+    next(error)
+  }
+});
+
+router.get('/get-by-category/:categoryId', passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
+  try {
+    const merchantId = req.user?.id as number
+    const categoryId = parseInt(req.params.categoryId)
+    const products = await productService.getByCategory(merchantId, categoryId);
     res.json({
       products:products
     });

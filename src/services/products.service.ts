@@ -1,17 +1,31 @@
 import boom from "@hapi/boom"
-import { Product } from "../database/typeorm/entities/product"
 import AppDataSource from "../database/typeorm"
+import { Product } from "../database/typeorm/entities/product"
 import { Merchant } from "../database/typeorm/entities"
+import { Category } from "../database/typeorm/entities"
 
 const productModel = AppDataSource.getRepository(Product)
+const categoryModel = AppDataSource.getRepository(Category)
 const merchantModel = AppDataSource.getRepository(Merchant)
+
+interface filterProducts  {
+    categoryId?: number
+}
 
 const productService = {
     get: async function(merchantId:number){
         const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
         if(!merchant) throw boom.notFound('user not found')
-        if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created")        
-        return merchant.products
+        if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created") 
+        const products = productModel.find({where:{merchant:merchant}, relations:{categories:true}})       
+        return products
+    },
+    getByCategory: async function(merchantId:number, categoryId:number){
+        const merchant = await merchantModel.findOne({where:{id:merchantId, categories:{id:categoryId}}, relations:{products:true}})
+        if(!merchant) throw boom.notFound('user not found')
+        if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created") 
+        const products = productModel.find({where:{merchant:merchant}, relations:{categories:true}})       
+        return products
     },
     findOne: async function(merchantId:number, productId: number){
         const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
@@ -55,8 +69,7 @@ const productService = {
         const product = merchant.products[productIndex]
         const result = await productModel.remove(product)
         return `product ${productId} deleted successfully`
-
-    }
+    },
 }
 
 export default productService

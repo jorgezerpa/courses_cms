@@ -74,4 +74,28 @@ router.delete('/:id',  passport.authenticate('jwt', {session:false}), validatorH
   }
 });
 
+router.patch('/add-to-category/:categoryId', passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
+  try {
+    const categoryId = parseInt(req.params.categoryId)
+    const productId = req.body.productId
+    const merchantId = req.user?.id as number
+    const result = await categoryService.addToCategory(productId, categoryId, merchantId)
+    res.json({result})
+  } catch (error) {
+      next(error)
+  }
+})
+
+router.patch('/remove-from-category/:categoryId', passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
+  try {
+    const categoryId = parseInt(req.params.categoryId)
+    const productId = req.body.productId
+    const merchantId = req.user?.id as number
+    const result = await categoryService.removeFromCategory(productId, categoryId, merchantId)
+    res.json({result})
+  } catch (error) {
+      next(error)
+  }
+})
+
 export default router;

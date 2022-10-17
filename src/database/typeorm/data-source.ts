@@ -4,6 +4,7 @@ import { DataSource } from "typeorm"
 import { Product, AuthMerchant, Category, Merchant, PaymentMethod, Shipping } from "./entities"
 import { PaymentPaypal } from './entities/paymentMethods'
 import { origin1666015590145 } from './migrations/1666015590145-origin'
+import { origin1666034437556 } from './migrations/1666034437556-origin'
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -20,7 +21,7 @@ export const AppDataSource = new DataSource({
         PaymentPaypal
     ],
     subscribers: [],
-    migrations: [origin1666015590145],
+    migrations: [origin1666015590145, origin1666034437556],
     // migrationsTableName: "custom_migration_table",
 })
 
