@@ -2,6 +2,7 @@ import express, {Request, Response, NextFunction} from 'express';
 import config from '../config';
 import passport from 'passport';
 import jwt from 'jsonwebtoken'
+import authService from '../services/auth.service';
 const router = express.Router();
 
 router.post('/login',
@@ -38,6 +39,28 @@ router.post('/refresh', async(req:Request, res:Response, next:NextFunction) => {
     next(error)
   }
 })
+
+router.post('/change-password', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+      const {newPassword, recoveryToken} = req.body
+      const result = await authService.changePassword(recoveryToken, newPassword)
+      res.json({result})
+    } catch (error) {
+      next(error)
+    }
+})
+
+router.post('/recovery',
+  async (req, res, next) => {
+    try {
+      const { email } = req.body;
+      const response = await authService.sendRecoveryEmail(email);
+      res.json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 
 

@@ -1,20 +1,21 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class origin1665928261208 implements MigrationInterface {
-    name = 'origin1665928261208'
+export class origin1666015590145 implements MigrationInterface {
+    name = 'origin1666015590145'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE \`auth_merchant\` (\`id\` int NOT NULL AUTO_INCREMENT, \`email\` varchar(255) NOT NULL, \`password\` varchar(255) NOT NULL, \`merchantId\` int NULL, UNIQUE INDEX \`REL_835fe9179e2572bbd1856eb9d6\` (\`merchantId\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
+        await queryRunner.query(`CREATE TABLE \`auth_merchant\` (\`id\` int NOT NULL AUTO_INCREMENT, \`email\` varchar(255) NOT NULL, \`recoveryToken\` varchar(255) NOT NULL, \`password\` varchar(255) NOT NULL, \`merchantId\` int NULL, UNIQUE INDEX \`REL_835fe9179e2572bbd1856eb9d6\` (\`merchantId\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`payment_method\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`merchant\` (\`id\` int NOT NULL AUTO_INCREMENT, \`firstName\` varchar(255) NOT NULL, \`lastName\` varchar(255) NOT NULL, \`email\` varchar(255) NOT NULL, \`phone\` varchar(255) NOT NULL, UNIQUE INDEX \`IDX_546608b3c7bf7c175d3780c38f\` (\`email\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`category\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`description\` varchar(255) NOT NULL, \`merchantId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
-        await queryRunner.query(`CREATE TABLE \`product\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`description\` varchar(255) NOT NULL, \`price\` int NOT NULL, \`quantity\` varchar(255) NOT NULL, \`merchant\` int NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
+        await queryRunner.query(`CREATE TABLE \`product\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`description\` varchar(255) NOT NULL, \`price\` int NOT NULL, \`quantity\` varchar(255) NOT NULL, \`merchantId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`shipping\` (\`id\` int NOT NULL AUTO_INCREMENT, \`country\` varchar(255) NOT NULL, \`state\` varchar(255) NOT NULL, \`city\` varchar(255) NOT NULL, \`street\` varchar(255) NOT NULL, \`references\` varchar(255) NOT NULL, \`coordinates\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`payment_paypal\` (\`id\` int NOT NULL AUTO_INCREMENT, \`userId\` int NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`merchant_payment_methods_payment_method\` (\`merchantId\` int NOT NULL, \`paymentMethodId\` int NOT NULL, INDEX \`IDX_0d66b943a761791ff223ae295d\` (\`merchantId\`), INDEX \`IDX_32131527b109a9828142a602cd\` (\`paymentMethodId\`), PRIMARY KEY (\`merchantId\`, \`paymentMethodId\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`category_products_product\` (\`categoryId\` int NOT NULL, \`productId\` int NOT NULL, INDEX \`IDX_90d521137ff8c3e927187bcd27\` (\`categoryId\`), INDEX \`IDX_ee240b247f9f23e5d35854c186\` (\`productId\`), PRIMARY KEY (\`categoryId\`, \`productId\`)) ENGINE=InnoDB`);
         await queryRunner.query(`ALTER TABLE \`auth_merchant\` ADD CONSTRAINT \`FK_835fe9179e2572bbd1856eb9d64\` FOREIGN KEY (\`merchantId\`) REFERENCES \`merchant\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE \`category\` ADD CONSTRAINT \`FK_5f44aa02d1c66d9a916a409fcb2\` FOREIGN KEY (\`merchantId\`) REFERENCES \`merchant\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE \`category\` ADD CONSTRAINT \`FK_5f44aa02d1c66d9a916a409fcb2\` FOREIGN KEY (\`merchantId\`) REFERENCES \`merchant\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE \`product\` ADD CONSTRAINT \`FK_62fcc319202f6ec1f6819e1d5f5\` FOREIGN KEY (\`merchantId\`) REFERENCES \`merchant\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`merchant_payment_methods_payment_method\` ADD CONSTRAINT \`FK_0d66b943a761791ff223ae295d1\` FOREIGN KEY (\`merchantId\`) REFERENCES \`merchant\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE \`merchant_payment_methods_payment_method\` ADD CONSTRAINT \`FK_32131527b109a9828142a602cdf\` FOREIGN KEY (\`paymentMethodId\`) REFERENCES \`payment_method\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`category_products_product\` ADD CONSTRAINT \`FK_90d521137ff8c3e927187bcd27d\` FOREIGN KEY (\`categoryId\`) REFERENCES \`category\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`);
@@ -26,6 +27,7 @@ export class origin1665928261208 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`category_products_product\` DROP FOREIGN KEY \`FK_90d521137ff8c3e927187bcd27d\``);
         await queryRunner.query(`ALTER TABLE \`merchant_payment_methods_payment_method\` DROP FOREIGN KEY \`FK_32131527b109a9828142a602cdf\``);
         await queryRunner.query(`ALTER TABLE \`merchant_payment_methods_payment_method\` DROP FOREIGN KEY \`FK_0d66b943a761791ff223ae295d1\``);
+        await queryRunner.query(`ALTER TABLE \`product\` DROP FOREIGN KEY \`FK_62fcc319202f6ec1f6819e1d5f5\``);
         await queryRunner.query(`ALTER TABLE \`category\` DROP FOREIGN KEY \`FK_5f44aa02d1c66d9a916a409fcb2\``);
         await queryRunner.query(`ALTER TABLE \`auth_merchant\` DROP FOREIGN KEY \`FK_835fe9179e2572bbd1856eb9d64\``);
         await queryRunner.query(`DROP INDEX \`IDX_ee240b247f9f23e5d35854c186\` ON \`category_products_product\``);

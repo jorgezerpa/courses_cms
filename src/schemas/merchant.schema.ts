@@ -3,7 +3,7 @@ import Joi from 'joi'
 const id=Joi.number();
 const firstName=Joi.string().min(3).max(30);
 const lastName=Joi.string().min(3).max(30);
-const email=Joi.string().min(6).max(50);
+const email=Joi.string().pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
 const password=Joi.string().min(3).max(30);
 const phone=Joi.string().min(3).max(30);
 

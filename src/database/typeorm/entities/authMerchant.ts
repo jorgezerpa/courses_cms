@@ -8,6 +8,9 @@ export class AuthMerchant {
 
     @Column()
     email?: string
+
+    @Column()   
+    recoveryToken?: string
     
     @Column()
     password?: string

@@ -3,7 +3,6 @@ import passport from "passport"
 import categoryService from '../services/categories.service'
 import { createCategorySchema, updateCategorySchema, getCategorySchema } from '../schemas/category.schema'
 import validatorHandler from '../middlewares/validator.handler'
-import { checkRoles } from '../middlewares/authorization.handler'
 
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
