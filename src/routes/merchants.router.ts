@@ -22,7 +22,7 @@ router.get('/', passport.authenticate('jwt', {session:false}),  async(req:Reques
   }
 });
 
-router.post('/', validatorHandler(createMerchantSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
+router.post('/', validatorHandler(createMerchantSchema, 'body'), validatorHandler(createMerchantSchema, 'body') , async(req:Request, res:Response, next:NextFunction) => {
   try {
     const {password, ...data} = req.body
     const merchant = await merchantService.create(data, password);
