@@ -19,6 +19,9 @@ export class Product {
     @Column()
     quantity?: string
 
+    @Column()
+    image?: string
+
     @ManyToMany(() => Category, (category) => category.products)
     categories?: Category[]
 

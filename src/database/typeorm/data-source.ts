@@ -3,7 +3,8 @@ import config from "../../config"
 import { DataSource } from "typeorm"
 import { Product, AuthMerchant, Category, Merchant, PaymentMethod, Shipping } from "./entities"
 import { PaymentPaypal } from './entities/paymentMethods'
-import { origin1666100257628 } from './migrations/1666100257628-origin'
+// import { origin1666100257628 } from './migrations/1666100257628-origin'
+import { origin1666121185553 } from './migrations/1666121185553-origin'
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -21,7 +22,7 @@ export const AppDataSource = new DataSource({
     ],
     subscribers: [],
     // migrations: ['./migrations/**.ts'],
-    migrations: [origin1666100257628],
+    migrations: [origin1666121185553],
     // migrationsTableName: "custom_migration_table",
 })
 

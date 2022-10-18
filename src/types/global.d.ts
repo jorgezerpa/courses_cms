@@ -4,6 +4,9 @@ type databaseType = 'mysql'
 
 declare global {
   namespace Express {
+    interface Request {
+      imagePath: undefined|string
+    }
     interface User {
       id: number;
     }
@@ -20,6 +23,7 @@ declare global {
         DB_NAME:string
 
         JWT_SECRET:string
+        DOMAIN_BASE_PATH:string
     }
   }
 }

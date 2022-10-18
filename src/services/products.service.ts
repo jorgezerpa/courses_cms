@@ -1,8 +1,10 @@
 import boom from "@hapi/boom"
+import path from "path"
 import AppDataSource from "../database/typeorm"
 import { Product } from "../database/typeorm/entities/product"
 import { Merchant } from "../database/typeorm/entities"
 import { Category } from "../database/typeorm/entities"
+import config from "../config"
 
 const productModel = AppDataSource.getRepository(Product)
 const categoryModel = AppDataSource.getRepository(Category)
@@ -37,6 +39,8 @@ const productService = {
         return product    
     },
     create: async function(merchantId:number, data: Product){
+        let imagePath = ''
+        if(data.image)imagePath = path.resolve('./','uploads', data.image)
         const merchant = await merchantModel.findOneBy({id:merchantId})
         if(!merchant) throw boom.notFound('merchant not found')
         const newProduct = new Product()
@@ -44,6 +48,7 @@ const productService = {
         newProduct.description = data.description
         newProduct.price = data.price
         newProduct.quantity = data.quantity
+        newProduct.image = imagePath
         newProduct.merchant = merchant
         const result = await productModel.save(newProduct)
         if(!result) throw boom.badRequest('Can not create the product')

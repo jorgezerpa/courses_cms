@@ -3,9 +3,7 @@ import passport from "passport"
 import productService from '../services/products.service'
 import { createProductSchema, updateProductSchema, getProductSchema } from '../schemas/product.schema'
 import validatorHandler from '../middlewares/validator.handler'
-
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+import { upload } from '../utils/multer/diskStorage'
 
 const router:Router = express.Router();
 
@@ -50,6 +48,7 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), validatorHandl
 router.post('/', passport.authenticate('jwt', {session:false}), upload.single('image'), validatorHandler(createProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const data = req.body
+    data.image = req.imagePath
     const merchantId = req.user?.id as number
     const product = await productService.create(merchantId, data);
     res.json({
