@@ -21,7 +21,7 @@ export class Merchant {
     @Column()
     phone?: string
 
-    @OneToOne(() => AuthMerchant, (authMerchant) => authMerchant.merchant,  { cascade: true })
+    @OneToOne(() => AuthMerchant, (authMerchant) => authMerchant.merchant)
     auth?: Relation<AuthMerchant> 
 
     @ManyToMany(() => PaymentMethod, (paymentMethod) => paymentMethod.merchants, {cascade:true})

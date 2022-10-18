@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation } from "typeorm"
+import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, Relation } from "typeorm"
 import { Merchant } from "./merchant" 
 
 @Entity()
 export class AuthMerchant {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id?: number
 
     @Column()

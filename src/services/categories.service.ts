@@ -64,7 +64,7 @@ const categoryService = {
         if(categoryIndex===-1) throw boom.notFound('category not found')
         const category = await categoryModel.findOne({where:{id:merchant.categories[categoryIndex].id}, relations:{products:true}})
         if(!category)throw boom.notFound('category not found')
-        const product = await productModel.findOneBy({id:productId})
+        const product = await productModel.findOneBy({id:productId, merchant:{id:merchantId}})
         if(!product) throw boom.notFound('product not found')
         if(!category.products || category.products?.length<=0) category.products = [product]
         else category.products.push(product)

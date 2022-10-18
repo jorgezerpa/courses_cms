@@ -5,6 +5,7 @@ import AppDataSource from "../database/typeorm"
 import encrypt from "../utils/bcrypt"
 
 const merchantModel = AppDataSource.getRepository(Merchant)
+const authModel = AppDataSource.getRepository(Auth)
 
 
 const merchantService = {
@@ -28,17 +29,17 @@ const merchantService = {
         merchant.firstName = data.firstName;
         merchant.email = data.email;
         merchant.phone = data.phone;
-        
+        const newMerchant = await merchantModel.save(merchant)
+        if(!newMerchant) throw boom.badRequest('Can not create the merchant')
+         
         const auth = new Auth()
+        auth.id = newMerchant.id
+        auth.merchant = newMerchant
         auth.password = await encrypt.hashPassword(password);
         auth.email = data.email;
+        
+        const newAuth = await authModel.save(auth)
 
-        merchant.auth = auth
-
-        const newMerchant = await merchantModel.save(merchant)
-        if(!newMerchant){
-            throw boom.badRequest('Can not create the merchant')
-        }
         delete newMerchant.auth
         return newMerchant
     },
