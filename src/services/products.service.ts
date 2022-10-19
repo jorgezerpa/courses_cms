@@ -4,7 +4,7 @@ import AppDataSource from "../database/typeorm"
 import { Product } from "../database/typeorm/entities/product"
 import { Merchant } from "../database/typeorm/entities"
 import { Category } from "../database/typeorm/entities"
-import config from "../config"
+import fs from 'fs'
 
 const productModel = AppDataSource.getRepository(Product)
 const categoryModel = AppDataSource.getRepository(Category)
@@ -54,13 +54,23 @@ const productService = {
         if(!result) throw boom.badRequest('Can not create the product')
         return result
     },
-    update: async function(merchantId:number, productId:number, changes: any){
+    update: async function(merchantId:number, productId:number, rawChanges: any){
+        const {image, ...changes} = rawChanges
+        if(image){
+            changes.image = path.resolve('./','uploads', rawChanges.image) 
+        } 
         const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
         if(!merchant) throw boom.notFound('user not found')
         if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created")        
         const productIndex = merchant.products.findIndex(product=>product.id===productId)
         if(productIndex===-1) throw boom.notFound('product not found')
         const product = merchant.products[productIndex]
+        if(image){
+            const path = product.image as string
+            fs.unlink(path, (err)=>{
+                if(err) throw err
+            })
+        }
         const updatedProduct = {...product, ...changes}
         const result = await productModel.save(updatedProduct)
         return result
@@ -72,6 +82,12 @@ const productService = {
         const productIndex = merchant.products.findIndex(product=>product.id===productId)
         if(productIndex===-1) throw boom.notFound('product not found')
         const product = merchant.products[productIndex]
+        if(Boolean(product.image)){
+            const path = product.image as string
+            fs.unlink(path, (err)=>{
+                if(err) throw err
+            })
+        }
         const result = await productModel.remove(product)
         return `product ${productId} deleted successfully`
     },

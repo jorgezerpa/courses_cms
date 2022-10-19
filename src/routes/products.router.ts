@@ -64,6 +64,7 @@ router.patch('/:id', passport.authenticate('jwt', {session:false}),upload.single
     const productId = parseInt(req.params.id)
     const merchantId = req.user?.id as number
     const changes = req.body;
+    changes.image = req.imagePath
     const product = await productService.update(merchantId,productId, changes);
     res.json({
       product: product
