@@ -3,20 +3,15 @@ import passport from "passport"
 import merchantService from '../services/merchant.service'
 import { createMerchantSchema, updateMerchantSchema, getMerchantSchema } from '../schemas/merchant.schema'
 import validatorHandler from '../middlewares/validator.handler'
-
-// const multer  = require('multer')
-// const upload = multer({ dest: 'uploads/' })
+import { handleResponse } from '../responses/response'
 
 const router:Router = express.Router();
 
 router.get('/', passport.authenticate('jwt', {session:false}),  async(req:Request, res:Response, next:NextFunction) => {
   try {
     let id = req.user?.id as number
-    console.log(id)
     const merchant = await merchantService.findOne(id);
-    res.json({
-      merchant: merchant
-    });
+    handleResponse(res, 200, 'merchant', {merchant})
   } catch (error) {
     next(error)
   }
@@ -26,9 +21,7 @@ router.post('/', validatorHandler(createMerchantSchema, 'body'), validatorHandle
   try {
     const {password, ...data} = req.body
     const merchant = await merchantService.create(data, password);
-    res.json({
-      merchant: merchant
-    });
+    handleResponse(res, 201, 'merchant created', {merchant})
   } catch (error) {
     next(error)
   }
@@ -39,9 +32,7 @@ router.patch('/', passport.authenticate('jwt', {session:false}), validatorHandle
     let id = req.user?.id as number
     const changes = req.body
     const merchant = await merchantService.update(id, changes);
-    res.json({
-      merchant: merchant
-    });
+    handleResponse(res, 200, 'merchant updated', {merchant})
   } catch (error) {
     next(error)
   }
@@ -50,10 +41,8 @@ router.patch('/', passport.authenticate('jwt', {session:false}), validatorHandle
 router.delete('',passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
   try {
     let id = req.user?.id as number
-    const merchantId = await merchantService.delete(id);
-    res.json({
-      merchant: merchantId
-    });
+    const result = await merchantService.delete(id);
+    handleResponse(res, 200, result, {})
   } catch (error) {
     next(error)
   }

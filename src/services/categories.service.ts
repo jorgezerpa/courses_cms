@@ -54,7 +54,7 @@ const categoryService = {
         if(categoryIndex===-1) throw boom.notFound('category not found')
         const category = merchant.categories[categoryIndex]
         const result = await categoryModel.remove(category)
-        return `category ${categoryId} deleted successfully`
+        return `category ${categoryId} deleted`
     },
     addToCategory:async function(productId:number, categoryId:number, merchantId:number){
         const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{categories:true}})
@@ -69,7 +69,7 @@ const categoryService = {
         if(!category.products || category.products?.length<=0) category.products = [product]
         else category.products.push(product)
         const result = await categoryModel.save(category)
-        return {message:'product added to category'}
+        return `product ${productId} added to category "${category.name}"`
     },
     removeFromCategory:async function(productId:number, categoryId:number, merchantId:number){
         const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{categories:true}})
@@ -83,7 +83,7 @@ const categoryService = {
         const categoryUpdated = category.products.filter(product=>product.id!==productId)
         category.products = [...categoryUpdated]
         const result = await categoryModel.save(category)
-        return {message:'product deleted from category'}
+        return `product ${productId} removed from category "${category.name}"`
     }
 }
 

@@ -30,8 +30,12 @@ const authService = {
             subject: "correo de recuperación", // Subject line
             html: `click aquí para setear una nueva contraseña <b>https://mifrontend.com/recovery-password?recovery-token=${token}</b>`, // html body
           }
-        const result = await this.sendMail(emailInfo)
-        return result
+        try{
+          const result = await this.sendMail(emailInfo)
+          return 'recovery password email sended successfully'
+        } catch(err){
+          throw err
+        }
     },
 
     changePassword: async function(token:string, newPassword:string){
@@ -59,7 +63,7 @@ const authService = {
         await transporter.sendMail(emailInfo, (err)=>{
             if(err)throw boom.internal('unespected error. Can not send mail')
         });
-        return { message: 'mail sent' };
+        return true;
       }
 }
 

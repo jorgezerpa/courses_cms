@@ -4,6 +4,7 @@ import productService from '../services/products.service'
 import { createProductSchema, updateProductSchema, getProductSchema } from '../schemas/product.schema'
 import validatorHandler from '../middlewares/validator.handler'
 import { upload } from '../utils/multer/diskStorage'
+import { handleResponse } from '../responses/response'
 
 const router:Router = express.Router();
 
@@ -11,9 +12,7 @@ router.get('/', passport.authenticate('jwt', {session:false}), async(req:Request
   try {
     const merchantId = req.user?.id as number
     const products = await productService.get(merchantId);
-    res.json({
-      products:products
-    });
+    handleResponse(res, 200, 'products list', {products})
   } catch (error) {
     next(error)
   }
@@ -24,9 +23,7 @@ router.get('/get-by-category/:categoryId', passport.authenticate('jwt', {session
     const merchantId = req.user?.id as number
     const categoryId = parseInt(req.params.categoryId)
     const products = await productService.getByCategory(merchantId, categoryId);
-    res.json({
-      products:products
-    });
+    handleResponse(res, 200, 'products list', {products})
   } catch (error) {
     next(error)
   }
@@ -37,9 +34,7 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), validatorHandl
     let productId = parseInt(req.params.id)
     let merchantId = req.user?.id as number
     const product = await productService.findOne(merchantId, productId);
-    res.json({
-      product: product
-    });
+    handleResponse(res, 200, 'product found', {product})
   } catch (error) {
     next(error)
   }
@@ -51,9 +46,7 @@ router.post('/', passport.authenticate('jwt', {session:false}), upload.single('i
     data.image = req.imagePath
     const merchantId = req.user?.id as number
     const product = await productService.create(merchantId, data);
-    res.json({
-      product: product
-    });
+    handleResponse(res, 201, 'product created', {product})
   } catch (error) {
     next(error)
   }
@@ -66,9 +59,7 @@ router.patch('/:id', passport.authenticate('jwt', {session:false}),upload.single
     const changes = req.body;
     changes.image = req.imagePath
     const product = await productService.update(merchantId,productId, changes);
-    res.json({
-      product: product
-    });
+    handleResponse(res, 200, 'products updated', {product})
   } catch (error) {
     next(error)
   }
@@ -79,9 +70,7 @@ router.delete('/:id',  passport.authenticate('jwt', {session:false}), validatorH
     const productId = parseInt(req.params.id)
     const merchantId = req.user?.id as number;
     const result = await productService.delete(merchantId, productId);
-    res.json({
-      result: result
-    });
+    handleResponse(res, 200, result, {})
   } catch (error) {
     next(error)
   }

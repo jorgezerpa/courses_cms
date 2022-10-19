@@ -3,6 +3,7 @@ import config from '../config';
 import passport from 'passport';
 import jwt from 'jsonwebtoken'
 import authService from '../services/auth.service';
+import { handleResponse } from '../responses/response';
 const router = express.Router();
 
 router.post('/login',
@@ -16,7 +17,7 @@ router.post('/login',
         const token = jwt.sign(payload, secret, {expiresIn:'10min'})
         const refreshToken = jwt.sign(payload, secretRefresh, {expiresIn:'1d'})
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'none',secure: true, maxAge: 24 * 60 * 60 * 1000});
-        res.json({token, merchant});
+        handleResponse(res, 200, 'login successfull', {token, merchant})        
     } catch (error) {
       next(error);
     }
@@ -33,7 +34,7 @@ router.post('/refresh', async(req:Request, res:Response, next:NextFunction) => {
         if(err) res.status(406).json('unauthorized')
         const secret = config.JWT_SECRET;
         const token = jwt.sign(payload, secret, {expiresIn:'10min'})
-        res.json({token, merchant})
+        handleResponse(res, 200, 'refresh token accepted', {token, merchant})
       })
   } catch (error) {
     next(error)
@@ -44,7 +45,7 @@ router.post('/change-password', async(req:Request, res:Response, next:NextFuncti
     try {
       const {newPassword, recoveryToken} = req.body
       const result = await authService.changePassword(recoveryToken, newPassword)
-      res.json({result})
+      handleResponse(res, 200, result, {})
     } catch (error) {
       next(error)
     }
@@ -54,8 +55,8 @@ router.post('/recovery',
   async (req, res, next) => {
     try {
       const { email } = req.body;
-      const response = await authService.sendRecoveryEmail(email);
-      res.json(response);
+      const result = await authService.sendRecoveryEmail(email);
+      handleResponse(res, 200, result, {})
     } catch (error) {
       next(error);
     }

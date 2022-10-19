@@ -58,7 +58,7 @@ const merchantService = {
             throw boom.notFound('merchant to delete not found')
         }
         await merchantModel.remove(merchant)
-        return { merchantId }
+        return `merchant ${merchantId} deleted`
     }
 }
 

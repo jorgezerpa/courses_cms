@@ -1,4 +1,5 @@
-import express, { Errback, Response, Request, NextFunction } from 'express'
+import express, { Response, Request, NextFunction } from 'express'
+import { handleErrorResponse } from '../responses/response'
 
 function logErrors(err: any,req:Request,res: Response,next: NextFunction){
     console.error(err);
@@ -6,16 +7,13 @@ function logErrors(err: any,req:Request,res: Response,next: NextFunction){
 }
 
 function errorHandler(err: any,req:Request,res: Response,next: NextFunction){
-    res.status(500).json({
-        message:err.message,
-        stack:err.stack
-    });
+    handleErrorResponse(res, err.status || 500, err.message, {})
 }
 
 function boomErrorHandler(err: any,req:Request,res: Response,next: NextFunction){
     if(err.isBoom){
         const{output}=err;
-        res.status(output.statusCode).json(output.payload);
+        handleErrorResponse(res, output.statusCode || 500, output.payload, {})
         return
     }
     next(err);
