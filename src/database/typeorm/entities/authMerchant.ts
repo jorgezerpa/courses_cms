@@ -9,7 +9,7 @@ export class AuthMerchant {
     @Column()
     email?: string
 
-    @Column()   
+    @Column({nullable:true})   
     recoveryToken?: string
     
     @Column()

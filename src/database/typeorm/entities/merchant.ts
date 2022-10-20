@@ -15,7 +15,7 @@ export class Merchant {
     @Column()
     lastName?: string
 
-    @Column({unique:true})
+    @Column()
     email?: string
     
     @Column()
