@@ -40,10 +40,9 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), validatorHandl
   }
 });
 
-router.post('/', passport.authenticate('jwt', {session:false}), upload.single('image'), validatorHandler(createProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
+router.post('/', passport.authenticate('jwt', {session:false}), validatorHandler(createProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const data = req.body
-    data.image = req.imagePath
     const merchantId = req.user?.id as number
     const product = await productService.create(merchantId, data);
     handleResponse(res, 201, 'product created', {product})
@@ -57,7 +56,6 @@ router.patch('/:id', passport.authenticate('jwt', {session:false}),upload.single
     const productId = parseInt(req.params.id)
     const merchantId = req.user?.id as number
     const changes = req.body;
-    changes.image = req.imagePath
     const product = await productService.update(merchantId,productId, changes);
     handleResponse(res, 200, 'products updated', {product})
   } catch (error) {

@@ -19,8 +19,11 @@ export class Product {
     @Column()
     quantity?: string
 
-    @Column()
+    @Column({nullable:true})
     image?: string
+
+    @Column({nullable:true})
+    imageId?: string
 
     @ManyToMany(() => Category, (category) => category.products)
     categories?: Category[]

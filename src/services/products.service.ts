@@ -4,15 +4,11 @@ import AppDataSource from "../database/typeorm"
 import { Product } from "../database/typeorm/entities/product"
 import { Merchant } from "../database/typeorm/entities"
 import { Category } from "../database/typeorm/entities"
+import { uploadFile, deleteFile } from '../utils/cloudinary/cloudinary'
 import fs from 'fs'
 
 const productModel = AppDataSource.getRepository(Product)
-const categoryModel = AppDataSource.getRepository(Category)
 const merchantModel = AppDataSource.getRepository(Merchant)
-
-interface filterProducts  {
-    categoryId?: number
-}
 
 const productService = {
     get: async function(merchantId:number){
@@ -39,8 +35,13 @@ const productService = {
         return product    
     },
     create: async function(merchantId:number, data: Product){
-        let imagePath = ''
-        if(data.image)imagePath = path.resolve('./','uploads', data.image)
+        let image = ''
+        let imageId = ''
+        if(data.image){
+            const result = await uploadFile(data.image)
+            image = result.secure_url
+            imageId = result.public_id
+        }
         const merchant = await merchantModel.findOneBy({id:merchantId})
         if(!merchant) throw boom.notFound('merchant not found')
         const newProduct = new Product()
@@ -48,28 +49,30 @@ const productService = {
         newProduct.description = data.description
         newProduct.price = data.price
         newProduct.quantity = data.quantity
-        newProduct.image = imagePath
+        newProduct.image = image
+        newProduct.imageId = imageId
         newProduct.merchant = merchant
         const result = await productModel.save(newProduct)
         if(!result) throw boom.badRequest('Can not create the product')
         return result
     },
     update: async function(merchantId:number, productId:number, rawChanges: any){
-        const {image, ...changes} = rawChanges
-        if(image){
-            changes.image = path.resolve('./','uploads', rawChanges.image) 
-        } 
+        let {image, ...changes} = rawChanges
+        let imageId = ''
+        if(Boolean(image)){
+            const newImage = await uploadFile(image)
+            changes.image = newImage.secure_url
+            changes.imageId = newImage.public_id
+        }
+
         const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
         if(!merchant) throw boom.notFound('user not found')
         if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created")        
         const productIndex = merchant.products.findIndex(product=>product.id===productId)
         if(productIndex===-1) throw boom.notFound('product not found')
         const product = merchant.products[productIndex]
-        if(image){
-            const path = product.image as string
-            fs.unlink(path, (err)=>{
-                if(err) throw err
-            })
+        if(Boolean(image) && product.imageId){
+            const result = await deleteFile(product.imageId)
         }
         const updatedProduct = {...product, ...changes}
         const result = await productModel.save(updatedProduct)
@@ -82,11 +85,8 @@ const productService = {
         const productIndex = merchant.products.findIndex(product=>product.id===productId)
         if(productIndex===-1) throw boom.notFound('product not found')
         const product = merchant.products[productIndex]
-        if(Boolean(product.image)){
-            const path = product.image as string
-            fs.unlink(path, (err)=>{
-                if(err) throw err
-            })
+        if(Boolean(product.image) && product.imageId){
+            const result = await deleteFile(product.imageId)
         }
         const result = await productModel.remove(product)
         return `product ${productId} deleted successfully`
