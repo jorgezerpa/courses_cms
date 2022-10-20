@@ -3,7 +3,6 @@ import passport from "passport"
 import productService from '../services/products.service'
 import { createProductSchema, updateProductSchema, getProductSchema } from '../schemas/product.schema'
 import validatorHandler from '../middlewares/validator.handler'
-import { upload } from '../utils/multer/diskStorage'
 import { handleResponse } from '../responses/response'
 
 const router:Router = express.Router();
@@ -51,7 +50,7 @@ router.post('/', passport.authenticate('jwt', {session:false}), validatorHandler
   }
 });
 
-router.patch('/:id', passport.authenticate('jwt', {session:false}),upload.single('image'), validatorHandler(getProductSchema, 'params'), validatorHandler(updateProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
+router.patch('/:id', passport.authenticate('jwt', {session:false}), validatorHandler(getProductSchema, 'params'), validatorHandler(updateProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const productId = parseInt(req.params.id)
     const merchantId = req.user?.id as number
