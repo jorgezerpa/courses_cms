@@ -6,7 +6,7 @@ export class AuthMerchant {
     @PrimaryColumn()
     id?: number
 
-    @Column()
+    @Column({unique:true})
     email?: string
 
     @Column({nullable:true})   

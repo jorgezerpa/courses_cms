@@ -9,7 +9,7 @@ const router:Router = express.Router();
 
 router.get('/', passport.authenticate('jwt', {session:false}),  async(req:Request, res:Response, next:NextFunction) => {
   try {
-    let id = req.user?.id as number
+    let id = req.user?.sub as number
     const merchant = await merchantService.findOne(id);
     handleResponse(res, 200, 'merchant', {merchant})
   } catch (error) {
@@ -29,7 +29,7 @@ router.post('/', validatorHandler(createMerchantSchema, 'body'), validatorHandle
 
 router.patch('/', passport.authenticate('jwt', {session:false}), validatorHandler(updateMerchantSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    let id = req.user?.id as number
+    let id = req.user?.sub as number
     const changes = req.body
     const merchant = await merchantService.update(id, changes);
     handleResponse(res, 200, 'merchant updated', {merchant})
@@ -40,7 +40,7 @@ router.patch('/', passport.authenticate('jwt', {session:false}), validatorHandle
 
 router.delete('',passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    let id = req.user?.id as number
+    let id = req.user?.sub as number
     const result = await merchantService.delete(id);
     handleResponse(res, 200, result, {})
   } catch (error) {

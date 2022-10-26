@@ -9,7 +9,7 @@ const router:Router = express.Router();
 
 router.get('/', passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    const merchantId = req.user?.id as number
+    const merchantId = req.user?.sub as number
     const products = await productService.get(merchantId);
     handleResponse(res, 200, 'products list', {products})
   } catch (error) {
@@ -19,7 +19,7 @@ router.get('/', passport.authenticate('jwt', {session:false}), async(req:Request
 
 router.get('/get-by-category/:categoryId', passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
   try {
-    const merchantId = req.user?.id as number
+    const merchantId = req.user?.sub as number
     const categoryId = parseInt(req.params.categoryId)
     const products = await productService.getByCategory(merchantId, categoryId);
     handleResponse(res, 200, 'products list', {products})
@@ -31,7 +31,7 @@ router.get('/get-by-category/:categoryId', passport.authenticate('jwt', {session
 router.get('/:id', passport.authenticate('jwt', {session:false}), validatorHandler(getProductSchema, 'params'),  async(req:Request, res:Response, next:NextFunction) => {
   try {
     let productId = parseInt(req.params.id)
-    let merchantId = req.user?.id as number
+    let merchantId = req.user?.sub as number
     const product = await productService.findOne(merchantId, productId);
     handleResponse(res, 200, 'product found', {product})
   } catch (error) {
@@ -42,7 +42,7 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), validatorHandl
 router.post('/', passport.authenticate('jwt', {session:false}), validatorHandler(createProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const data = req.body
-    const merchantId = req.user?.id as number
+    const merchantId = req.user?.sub as number
     const product = await productService.create(merchantId, data);
     handleResponse(res, 201, 'product created', {product})
   } catch (error) {
@@ -53,7 +53,7 @@ router.post('/', passport.authenticate('jwt', {session:false}), validatorHandler
 router.patch('/:id', passport.authenticate('jwt', {session:false}), validatorHandler(getProductSchema, 'params'), validatorHandler(updateProductSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const productId = parseInt(req.params.id)
-    const merchantId = req.user?.id as number
+    const merchantId = req.user?.sub as number
     const changes = req.body;
     const product = await productService.update(merchantId,productId, changes);
     handleResponse(res, 200, 'products updated', {product})
@@ -65,7 +65,7 @@ router.patch('/:id', passport.authenticate('jwt', {session:false}), validatorHan
 router.delete('/:id',  passport.authenticate('jwt', {session:false}), validatorHandler(getProductSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const productId = parseInt(req.params.id)
-    const merchantId = req.user?.id as number;
+    const merchantId = req.user?.sub as number;
     const result = await productService.delete(merchantId, productId);
     handleResponse(res, 200, result, {})
   } catch (error) {

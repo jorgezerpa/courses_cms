@@ -5,6 +5,7 @@ import nodeMailer from 'nodemailer'
 import jwt from 'jsonwebtoken'
 import config from "../config"
 import bcrypt from '../utils/bcrypt'
+import merchantService from "./merchant.service"
 
 const authMerchantModel = AppDataSource.getRepository(AuthMerchant)
 
@@ -17,6 +18,17 @@ const authService = {
         return auth
     },
 
+    handleRefreshToken: async function(refreshToken:any){
+      if(!refreshToken) throw boom.unauthorized('unauthorized')  
+      const { sub } = jwt.verify(refreshToken, config.JWT_REFRESH_SECRET)
+      if(!sub) throw boom.unauthorized('unauthorized')  
+      const payload = {sub}
+      const secret = config.JWT_SECRET;
+      const secretRefresh = config.JWT_REFRESH_SECRET;
+      const token = jwt.sign({...payload}, secret, {expiresIn:'10min'})
+      const newRefreshToken = jwt.sign({...payload}, secretRefresh, {expiresIn:'1d'})
+      return { token, refreshToken: newRefreshToken }
+    },
     sendRecoveryEmail: async function(email:string){
         const user = await authMerchantModel.findOne({where: { email:email }, relations:{merchant:true} })        
         if(!user) throw boom.unauthorized('unauthorized')

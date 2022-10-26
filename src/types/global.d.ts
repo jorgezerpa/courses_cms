@@ -9,6 +9,7 @@ declare global {
     }
     interface User {
       id: number;
+      sub: number;
     }
   }
   namespace NodeJS {
