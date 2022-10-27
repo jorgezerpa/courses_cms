@@ -1,9 +1,9 @@
 import express, { Router, Response, Request, NextFunction } from 'express'
 import passport from "passport"
-import merchantService from '../services/merchant.service'
-import { createMerchantSchema, updateMerchantSchema, getMerchantSchema } from '../schemas/merchant.schema'
-import validatorHandler from '../middlewares/validator.handler'
-import { handleResponse } from '../responses/response'
+import merchantService from '../../services/merchant.service'
+import { createMerchantSchema, updateMerchantSchema, getMerchantSchema } from '../../schemas/merchant.schema'
+import validatorHandler from '../../middlewares/validator.handler'
+import { handleResponse } from '../../responses/response'
 
 const router:Router = express.Router();
 

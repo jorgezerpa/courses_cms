@@ -1,10 +1,10 @@
 import express, {Request, Response, NextFunction} from 'express';
-import config from '../config';
+import config from '../../config';
 import passport from 'passport';
 import jwt from 'jsonwebtoken'
-import authService from '../services/auth.service';
-import merchantService from '../services/merchant.service';
-import { handleResponse } from '../responses/response';
+import authService from '../../services/auth.service';
+import merchantService from '../../services/merchant.service';
+import { handleResponse } from '../../responses/response';
 const router = express.Router();
 
 router.post('/login',

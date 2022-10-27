@@ -1,9 +1,9 @@
 import express, { Router, Response, Request, NextFunction, Express } from 'express'
 import passport from "passport"
-import categoryService from '../services/categories.service'
-import { createCategorySchema, updateCategorySchema, getCategorySchema } from '../schemas/category.schema'
-import validatorHandler from '../middlewares/validator.handler'
-import { handleResponse } from '../responses/response'
+import categoryService from '../../services/categories.service'
+import { createCategorySchema, updateCategorySchema, getCategorySchema } from '../../schemas/category.schema'
+import validatorHandler from '../../middlewares/validator.handler'
+import { handleResponse } from '../../responses/response'
 
 const router:Router = express.Router();
 
