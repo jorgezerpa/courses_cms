@@ -16,7 +16,11 @@ const config = {
 
     GMAIL_KEY: process.env.GMAIL_KEY,
 
-    DOMAIN_BASE_PATH: process.env.DOMAIN_BASE_PATH
+    DOMAIN_BASE_PATH: process.env.DOMAIN_BASE_PATH,
+
+    PAYPAL_USER_ID: process.env.PAYPAL_USER_ID,
+    PAYPAL_SECRET: process.env.PAYPAL_SECRET,
+    PAYPAL_API: process.env.PAYPAL_API,
 }
 
 export default config

@@ -25,6 +25,10 @@ declare global {
 
         JWT_SECRET:string
         DOMAIN_BASE_PATH:string
+
+        PAYPAL_USER_ID:string
+        PAYPAL_SECRET:string
+        PAYPAL_API:string
     }
   }
 }
