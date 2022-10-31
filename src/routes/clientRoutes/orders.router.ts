@@ -5,8 +5,8 @@ import { paypalService } from '../../utils/paypal'
 const router:Router = express.Router();
 
 
-router.get('/testing', async(req:Request, res:Response, next:NextFunction) => {
-    res.send('i am working well')
+router.post('/', async(req:Request, res:Response, next:NextFunction) => {
+    //create order logic
 });
 
 export default router;

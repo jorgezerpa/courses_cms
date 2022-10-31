@@ -5,7 +5,7 @@ import { paypalService } from '../../utils/paypal'
 
 const router:Router = express.Router();
 
-router.post('/capture', passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
+router.post('/capture', async(req:Request, res:Response, next:NextFunction) => {
   try {
     const price = req.body.price 
     const result = await paypalService.createPayment(price)
@@ -15,7 +15,7 @@ router.post('/capture', passport.authenticate('jwt', {session:false}), async(req
   }
 });
 
-router.post('/execute', passport.authenticate('jwt', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
+router.post('/execute', async(req:Request, res:Response, next:NextFunction) => {
   try {
     const token = req.body.token 
     const result = await paypalService.executePayment(token)
