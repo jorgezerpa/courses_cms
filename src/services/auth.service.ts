@@ -17,6 +17,13 @@ const authService = {
         }  
         return auth
     },
+    findOneByClientId: async function(clientId: string){
+        const auth = await authMerchantModel.findOne({where: { clientId:clientId }, relations:{merchant:true} })        
+        if(!auth){
+            throw boom.notFound('auth not found')
+        }  
+        return auth
+    },
 
     handleRefreshToken: async function(refreshToken:any){
       if(!refreshToken) throw boom.unauthorized('unauthorized')  
