@@ -8,7 +8,7 @@ export class Order {
     id?: number
 
     @ManyToOne(() => Merchant, (merchant) => merchant.orders)
-    merchant?: Relation<AuthMerchant> 
+    merchant?: Relation<Merchant> 
 
     @Column()
     state?:string

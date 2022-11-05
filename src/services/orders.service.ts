@@ -21,7 +21,8 @@ const ordersService = {
     create: async function(data:string, merchantId:number){
         const merchant = await merchantModel.findOneBy({id: merchantId})
         if(!merchant) throw boom.unauthorized('unauthorized')
-        const newOrder = await orderModel.save({ order: data, status:'in-process', merchant:merchant})
+        const fullNewOrder:Order = { order: data, state:'in-process', merchant:merchant}
+        const newOrder:Order = await orderModel.save(fullNewOrder)
         if(!newOrder) throw boom.badRequest('Can not save the order')
         return newOrder
     },

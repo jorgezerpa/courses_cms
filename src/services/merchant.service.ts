@@ -41,7 +41,7 @@ const merchantService = {
         auth.clientSecret = generatePassword.generate({ length:30, numbers:true }) 
         auth.clientId = generatePassword.generate({ length:30, numbers:true })    
         const newAuth = await authModel.save(auth)
-        if(newAuth){
+        if(!newAuth){
             await merchantModel.remove(newMerchant) //if auth can not be created, we have to delete the created merchant
             throw boom.badRequest('can not create merchant')
         }

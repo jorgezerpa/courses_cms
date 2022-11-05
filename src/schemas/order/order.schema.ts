@@ -1,4 +1,4 @@
-import Joi, { required, string } from 'joi'
+import Joi from 'joi'
 import { directionSchema } from './direction'
 import { orderProductSchema } from './product'
 
@@ -8,7 +8,7 @@ const lastName=Joi.string().min(3).max(30);
 const email=Joi.string().pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
 const products= Joi.array().items(orderProductSchema)
 const phone=Joi.string().min(3).max(30);
-const paymentMethod=string();
+const paymentMethod=Joi.string();
 const totalAmount=Joi.number();
 const paymentMethodReceipt=Joi.string()
 const direction = directionSchema
