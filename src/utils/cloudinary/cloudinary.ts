@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary'
+import boom from '@hapi/boom'
 
  cloudinary.config({ 
     cloud_name: 'zerpacode', 
@@ -8,13 +9,21 @@ import { v2 as cloudinary } from 'cloudinary'
   });
 
 export async function uploadFile(img:string){  
-    const result = await cloudinary.uploader.upload(img, { folder: 'products' })
-    return result
+    try {
+      const result = await cloudinary.uploader.upload(img, { folder: 'products' })
+      return result
+    } catch (error:any) {
+        throw boom.internal(error)
+    }
 }
 
-export async function deleteFile(imgId:string){  
+export async function deleteFile(imgId:string){
+  try {
     const result = await cloudinary.uploader.destroy(imgId)
     return result
+  } catch (error:any) {
+    throw boom.internal(error)
+  }  
 }
 
 export default cloudinary

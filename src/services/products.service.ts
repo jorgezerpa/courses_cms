@@ -38,9 +38,13 @@ const productService = {
         let image = ''
         let imageId = ''
         if(data.image){
-            const result = await uploadFile(data.image)
-            image = result.secure_url
-            imageId = result.public_id
+            try {
+                const result = await uploadFile(data.image)
+                image = result.secure_url
+                imageId = result.public_id
+            } catch (error:any) {
+                throw boom.internal(error)
+            }
         }
         const merchant = await merchantModel.findOneBy({id:merchantId})
         if(!merchant) throw boom.notFound('merchant not found')
@@ -60,9 +64,13 @@ const productService = {
         let {image, ...changes} = rawChanges
         let imageId = ''
         if(Boolean(image)){
-            const newImage = await uploadFile(image)
-            changes.image = newImage.secure_url
-            changes.imageId = newImage.public_id
+            try {
+                const newImage = await uploadFile(image)
+                changes.image = newImage.secure_url
+                changes.imageId = newImage.public_id
+            } catch (error:any) {
+                throw boom.internal(error)
+            }
         }
 
         const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
@@ -86,7 +94,11 @@ const productService = {
         if(productIndex===-1) throw boom.notFound('product not found')
         const product = merchant.products[productIndex]
         if(Boolean(product.image) && product.imageId){
-            const result = await deleteFile(product.imageId)
+            try {
+                const result = await deleteFile(product.imageId)
+            } catch (error) {
+                throw boom.internal('can not delete the product, try again.')
+            }
         }
         const result = await productModel.remove(product)
         return `product ${productId} deleted successfully`
