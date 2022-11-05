@@ -31,18 +31,21 @@ const merchantService = {
         merchant.email = data.email;
         merchant.phone = data.phone;
         const newMerchant = await merchantModel.save(merchant)
-        if(!newMerchant) throw boom.badRequest('Can not create the merchant')
-         
+        if(!newMerchant) throw boom.badRequest('Can not create merchant')
+    
         const auth = new Auth()
         auth.id = newMerchant.id
         auth.merchant = newMerchant
         auth.password = await encrypt.hashPassword(password);
         auth.email = data.email;
         auth.clientSecret = generatePassword.generate({ length:30, numbers:true }) 
-        auth.clientId = generatePassword.generate({ length:30, numbers:true })
-        
+        auth.clientId = generatePassword.generate({ length:30, numbers:true })    
         const newAuth = await authModel.save(auth)
-        delete newMerchant.auth
+        if(newAuth){
+            await merchantModel.remove(newMerchant) //if auth can not be created, we have to delete the created merchant
+            throw boom.badRequest('can not create merchant')
+        }
+        delete newMerchant.auth //VERY IMPORTANT!!
         return newMerchant
     },
     update: async function(merchantId:number, changes: any){
