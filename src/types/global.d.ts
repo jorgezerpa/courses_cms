@@ -29,6 +29,10 @@ declare global {
         PAYPAL_USER_ID:string
         PAYPAL_SECRET:string
         PAYPAL_API:string
+
+        CLOUDINARY_NAME:string
+        CLOUDINARY_API_KEY:string
+        CLOUDINARY_API_SECRET:string
     }
   }
 }

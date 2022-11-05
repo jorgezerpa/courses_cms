@@ -21,6 +21,11 @@ const config = {
     PAYPAL_USER_ID: process.env.PAYPAL_USER_ID,
     PAYPAL_SECRET: process.env.PAYPAL_SECRET,
     PAYPAL_API: process.env.PAYPAL_API,
+
+    CLOUDINARY_NAME:process.env.CLOUDINARY_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET:process.env.CLOUDINARY_API_SECRET,
+
 }
 
 export default config
