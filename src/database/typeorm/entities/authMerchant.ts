@@ -11,7 +11,13 @@ export class AuthMerchant {
 
     @Column({nullable:true})   
     recoveryToken?: string
-    
+
+    @Column({ nullable: false })   
+    clientId?: string
+
+    @Column({ nullable:false })   
+    clientSecret?: string
+
     @Column()
     password?: string
     @OneToOne(() => Merchant, (merchant) => merchant.auth, { onDelete:"CASCADE" })

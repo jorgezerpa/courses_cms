@@ -1,4 +1,5 @@
 import boom from "@hapi/boom"
+import generatePassword from 'generate-password'
 import { Merchant } from "../database/typeorm/entities/merchant"
 import { AuthMerchant as Auth } from "../database/typeorm/entities"
 import AppDataSource from "../database/typeorm"
@@ -37,9 +38,10 @@ const merchantService = {
         auth.merchant = newMerchant
         auth.password = await encrypt.hashPassword(password);
         auth.email = data.email;
+        auth.clientSecret = generatePassword.generate({ length:30, numbers:true }) 
+        auth.clientId = generatePassword.generate({ length:30, numbers:true })
         
         const newAuth = await authModel.save(auth)
-
         delete newMerchant.auth
         return newMerchant
     },

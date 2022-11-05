@@ -7,7 +7,7 @@ import { handleResponse } from '../../responses/response'
 
 const router:Router = express.Router();
 
-router.get('/', async(req:Request, res:Response, next:NextFunction) => {
+router.get('/', passport.authenticate('header', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const merchantId = req.user?.sub as number
     const products = await productService.get(merchantId);
@@ -17,7 +17,7 @@ router.get('/', async(req:Request, res:Response, next:NextFunction) => {
   }
 });
 
-router.get('/get-by-category/:categoryId', async(req:Request, res:Response, next:NextFunction) => {
+router.get('/get-by-category/:categoryId', passport.authenticate('header', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
   try {
     const merchantId = req.user?.sub as number
     const categoryId = parseInt(req.params.categoryId)
@@ -28,7 +28,7 @@ router.get('/get-by-category/:categoryId', async(req:Request, res:Response, next
   }
 });
 
-router.get('/:id', validatorHandler(getProductSchema, 'params'),  async(req:Request, res:Response, next:NextFunction) => {
+router.get('/:id', passport.authenticate('header', {session:false}), validatorHandler(getProductSchema, 'params'),  async(req:Request, res:Response, next:NextFunction) => {
   try {
     let productId = parseInt(req.params.id)
     let merchantId = req.user?.sub as number
