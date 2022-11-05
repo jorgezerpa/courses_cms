@@ -1,0 +1,1 @@
+export type OrderStateType = 'in-process' | 'canceled' | 'done' | 'error'

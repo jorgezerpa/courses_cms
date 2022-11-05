@@ -1,12 +1,26 @@
 import express, { Router, Response, Request, NextFunction } from 'express'
 import passport from "passport"
-import { paypalService } from '../../utils/paypal'
+import { handleResponse } from '../../responses/response'
+import { order } from "../../dataTemplates/order"
+import { createOrderSchema } from '../../schemas/order/order.schema'
+import validatorHandler from '../../middlewares/validator.handler'
+import orderService from '../../services/orders.service'
 
 const router:Router = express.Router();
 
+router.post('/', passport.authenticate('header', {session:false}), validatorHandler(createOrderSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
+    try {
+        const order = JSON.stringify(req.body)
+        const userId = req.user?.sub as number
+        const result = await orderService.create(order, userId)
+        handleResponse(res, 200, 'order saved', {result})
+    } catch (error) {   
+        next(error)
+    }
+});
 
-router.get('/', passport.authenticate('header', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
-    res.json(req.user)
+router.get('/template', passport.authenticate('header', {session:false}), async(req:Request, res:Response, next:NextFunction) => {
+    res.json(order)
 });
 
 export default router;
