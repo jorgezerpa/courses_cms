@@ -12,6 +12,7 @@ const paymentMethod=Joi.string();
 const totalAmount=Joi.number();
 const paymentMethodReceipt=Joi.string()
 const direction = directionSchema
+const status = Joi.string().regex(/^(canceled|in-process|error|done)$/)
 
 const createOrderSchema=Joi.object({
     buyer: {
@@ -28,7 +29,11 @@ const createOrderSchema=Joi.object({
 });
 
 const getOrderSchema=Joi.object({
-    id:id.required(),
+    orderId:id.required(),
 });
 
-export {createOrderSchema, getOrderSchema}
+const updateOrderStatusSchema=Joi.object({
+    status: status,
+});
+
+export {createOrderSchema, getOrderSchema, updateOrderStatusSchema}

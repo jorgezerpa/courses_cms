@@ -10,7 +10,7 @@ export class Order {
     @ManyToOne(() => Merchant, (merchant) => merchant.orders)
     merchant?: Relation<Merchant> 
 
-    @Column()
+    @Column({ nullable:false })
     state?:string
 
     @Column({ type:'text' })
