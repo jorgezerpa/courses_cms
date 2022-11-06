@@ -64,6 +64,12 @@ const merchantService = {
         }
         await merchantModel.remove(merchant)
         return `merchant ${merchantId} deleted`
+    },
+    getClientCredentials:async (merchantId:number) => {
+        const auth = await authModel.findOneBy({ merchant:{id:merchantId} })
+        if(!auth) throw boom.unauthorized('unauthorized')
+        const data = { clientId: auth.clientId, clientSecret: auth.clientSecret}
+        return data
     }
 }
 
