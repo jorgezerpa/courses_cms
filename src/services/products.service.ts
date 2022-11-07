@@ -3,9 +3,7 @@ import path from "path"
 import AppDataSource from "../database/typeorm"
 import { Product } from "../database/typeorm/entities/product"
 import { Merchant } from "../database/typeorm/entities"
-import { Category } from "../database/typeorm/entities"
 import { uploadFile, deleteFile } from '../utils/cloudinary/cloudinary'
-import fs from 'fs'
 
 const productModel = AppDataSource.getRepository(Product)
 const merchantModel = AppDataSource.getRepository(Merchant)

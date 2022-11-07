@@ -1,11 +1,13 @@
 import boom from "@hapi/boom"
 import AppDataSource from "../database/typeorm"
 import { Order } from '../database/typeorm/entities/order'
+import { Product } from "../database/typeorm/entities"
 import { Merchant } from "../database/typeorm/entities"
 import { OrderStateType } from '../types/orderState.type'
 
 const orderModel = AppDataSource.getRepository(Order)
 const merchantModel = AppDataSource.getRepository(Merchant)
+const productModel = AppDataSource.getRepository(Product)
 
 const ordersService = {
     get: async function(merchantId:number){
@@ -19,6 +21,7 @@ const ordersService = {
         return order
     },
     create: async function(data:string, merchantId:number){
+        //check products and change his column isAvailable are managed with a middleware (check the routes) 
         const merchant = await merchantModel.findOneBy({id: merchantId})
         if(!merchant) throw boom.unauthorized('unauthorized')
         const fullNewOrder:Order = { order: data, state:'in-process', merchant:merchant}

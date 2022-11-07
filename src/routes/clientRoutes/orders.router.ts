@@ -5,10 +5,11 @@ import { order } from "../../dataTemplates/order"
 import { createOrderSchema } from '../../schemas/order/order.schema'
 import validatorHandler from '../../middlewares/validator.handler'
 import orderService from '../../services/orders.service'
+import { handleOrderProducts } from '../../middlewares/orderProducts.handler'
 
 const router:Router = express.Router();
 
-router.post('/', passport.authenticate('header', {session:false}), validatorHandler(createOrderSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
+router.post('/', passport.authenticate('header', {session:false}), validatorHandler(createOrderSchema, 'body'), handleOrderProducts, async(req:Request, res:Response, next:NextFunction) => {
     try {
         const order = JSON.stringify(req.body)
         const userId = req.user?.sub as number

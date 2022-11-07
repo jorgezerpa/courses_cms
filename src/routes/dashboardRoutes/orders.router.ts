@@ -6,6 +6,7 @@ import { createOrderSchema, getOrderSchema, updateOrderStatusSchema } from '../.
 import validatorHandler from '../../middlewares/validator.handler'
 import orderService from '../../services/orders.service'
 import { OrderStateType } from '../../types/orderState.type'
+import { handleOrderProducts } from '../../middlewares/orderProducts.handler'
 
 const router:Router = express.Router();
 
@@ -34,7 +35,7 @@ router.get('/:orderId', passport.authenticate('jwt', {session:false}), validator
     }
 });
 
-router.post('/', passport.authenticate('jwt', {session:false}), validatorHandler(createOrderSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
+router.post('/', passport.authenticate('jwt', {session:false}), validatorHandler(createOrderSchema, 'body'), handleOrderProducts, async(req:Request, res:Response, next:NextFunction) => {
     try {
         const order = JSON.stringify(req.body)
         const userId = req.user?.sub as number
