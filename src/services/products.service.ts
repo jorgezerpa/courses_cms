@@ -1,21 +1,22 @@
 import boom from "@hapi/boom"
-import path from "path"
 import AppDataSource from "../database/typeorm"
 import { Product } from "../database/typeorm/entities/product"
 import { Merchant } from "../database/typeorm/entities"
-import { Category } from "../database/typeorm/entities"
 import { uploadFile, deleteFile } from '../utils/cloudinary/cloudinary'
-import fs from 'fs'
+import { productsfilter } from '../filters/products.filter'
+    //types and interfaces
+import { ProductsFilterQuery } from '../types/filters'
 
 const productModel = AppDataSource.getRepository(Product)
 const merchantModel = AppDataSource.getRepository(Merchant)
 
 const productService = {
-    get: async function(merchantId:number){
+    get: async function(merchantId:number, filterOptions:ProductsFilterQuery={}){
+        const filter = productsfilter(filterOptions)
         const merchant = await merchantModel.findOne({where:{id:merchantId}, relations:{products:true}})
         if(!merchant) throw boom.notFound('user not found')
         if(!merchant.products || merchant.products.length<=0 )throw boom.notFound("not products created") 
-        const products = productModel.find({where:{merchant:merchant}, relations:{categories:true}})       
+        const products = productModel.find({where:{merchant:merchant, ...filter}, relations:{categories:true}})       
         return products
     },
     getByCategory: async function(merchantId:number, categoryId:number){

@@ -3,6 +3,7 @@ import { AuthMerchant } from "./authMerchant"
 import { Category } from "./category"
 import { PaymentMethod } from "./paypmentMethod"
 import { Product } from "./product"
+import { Order } from "./order"
 
 @Entity()
 export class Merchant {
@@ -23,6 +24,9 @@ export class Merchant {
 
     @OneToOne(() => AuthMerchant, (authMerchant) => authMerchant.merchant)
     auth?: Relation<AuthMerchant> 
+    
+    @OneToMany(() => Order, (order) => order.merchant)
+    orders?: Relation<Order[]>
 
     @ManyToMany(() => PaymentMethod, (paymentMethod) => paymentMethod.merchants, {cascade:true})
     @JoinTable()

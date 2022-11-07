@@ -48,4 +48,14 @@ router.delete('',passport.authenticate('jwt', {session:false}), async(req:Reques
   }
 });
 
+router.get('/client-credentials', passport.authenticate('jwt', {session:false}),  async(req:Request, res:Response, next:NextFunction) => {
+  try {
+    let id = req.user?.sub as number
+    const merchantCredentials = await merchantService.getClientCredentials(id);
+    handleResponse(res, 200, 'merchant credentials', {merchantCredentials})
+  } catch (error) {
+    next(error)
+  }
+});
+
 export default router;

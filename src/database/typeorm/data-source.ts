@@ -1,9 +1,9 @@
 import "reflect-metadata"
 import config from "../../config"
 import { DataSource } from "typeorm"
-import { Product, AuthMerchant, Category, Merchant, PaymentMethod, Shipping } from "./entities"
+import { Product, AuthMerchant, Category, Merchant, PaymentMethod, Shipping, Order } from "./entities"
 import { PaymentPaypal } from './entities/paymentMethods'
-import { origin1667587276609 } from './migrations/1667587276609-origin' 
+import { origin1667864941346 } from './migrations/1667864941346-origin' 
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -17,10 +17,10 @@ export const AppDataSource = new DataSource({
     logging: false,
     entities: [
         Product, AuthMerchant, Category, Merchant, PaymentMethod, Shipping,
-        PaymentPaypal
+        PaymentPaypal, Order,
     ],
     subscribers: [],
-    migrations: [origin1667587276609],
+    migrations: [origin1667864941346],
     // migrationsTableName: "custom_migration_table",
 })
 

@@ -24,6 +24,9 @@ export class Product {
 
     @Column({nullable:true})
     imageId?: string
+    
+    @Column({default:true})
+    isAvailable?: boolean
 
     @ManyToMany(() => Category, (category) => category.products)
     categories?: Category[]
