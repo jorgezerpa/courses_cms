@@ -1,4 +1,4 @@
-import Joi, { required } from 'joi'
+import Joi, { boolean, required } from 'joi'
 
 const id=Joi.number();
 const name=Joi.string().min(3).max(30);
@@ -36,4 +36,8 @@ const getProductSchema=Joi.object({
     id:id.required(),
 });
 
-export {createProductSchema,updateProductSchema,getProductSchema, filterProductSchema}
+const getProductsFilterSchema=Joi.object({
+    unavailable: Joi.bool()
+});
+
+export {createProductSchema,updateProductSchema,getProductSchema, filterProductSchema, getProductsFilterSchema}
