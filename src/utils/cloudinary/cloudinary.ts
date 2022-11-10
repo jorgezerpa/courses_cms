@@ -9,9 +9,9 @@ import config from '../../config'
     secure: true
   });
 
-export async function uploadFile(img:string){  
+export async function uploadFile(img:string, folder:string){  
     try {
-      const result = await cloudinary.uploader.upload(img, { folder: 'products' })
+      const result = await cloudinary.uploader.upload(img, { folder: folder })
       return result
     } catch (error:any) {
         throw boom.internal(error)

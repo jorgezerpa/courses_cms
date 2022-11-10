@@ -17,6 +17,12 @@ export class Category {
     @JoinTable()
     products?: Product[]
 
+    @Column({nullable:true})
+    image?: string
+
+    @Column({nullable:true})
+    imageId?: string
+
     @ManyToOne(() => Merchant, (merchant) => merchant.categories, {cascade:true, onDelete:'CASCADE'})
     merchant?:Merchant
 }

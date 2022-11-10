@@ -10,6 +10,8 @@ import { ProductsFilterQuery } from '../types/filters'
 const productModel = AppDataSource.getRepository(Product)
 const merchantModel = AppDataSource.getRepository(Merchant)
 
+const PRODUCTS_FOLDER = 'products'
+
 const productService = {
     get: async function(merchantId:number, filterOptions:ProductsFilterQuery={}){
         const filter = productsfilter(filterOptions)
@@ -40,7 +42,7 @@ const productService = {
         let imageId = ''
         if(data.image){
             try {
-                const result = await uploadFile(data.image)
+                const result = await uploadFile(data.image, PRODUCTS_FOLDER)
                 image = result.secure_url
                 imageId = result.public_id
             } catch (error:any) {
@@ -66,7 +68,7 @@ const productService = {
         let imageId = ''
         if(Boolean(image)){
             try {
-                const newImage = await uploadFile(image)
+                const newImage = await uploadFile(image, PRODUCTS_FOLDER)
                 changes.image = newImage.secure_url
                 changes.imageId = newImage.public_id
             } catch (error:any) {
