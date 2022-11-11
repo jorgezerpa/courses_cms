@@ -2,34 +2,15 @@ import Joi, { required } from 'joi'
 
 const id=Joi.number();
 const totalAmount=Joi.number();
-const clientId=Joi.number();
 const merchantId = Joi.number();
-
-const createCartSchema=Joi.object({
-    id: id.required(),
-    totalAmount: totalAmount.required(),
-    clientId: clientId.required(),
-    merchantId: merchantId.required(),
-    
-});
+const productId = Joi.number();
 
 const updateCartSchema=Joi.object({
-    id: id,
-    totalAmount: totalAmount,
-    clientId: clientId,
-    merchantId: merchantId,
+    productId: productId.required()
 });
-
-// const filterCartSchema=Joi.object({
-//     name:name,
-//     description: description,
-//     price: price,
-//     quantity: quantity,
-//     merchantId: merchantId,
-// });
 
 const getCartSchema=Joi.object({
-    id:id.required(),
+    cartId:id.required(),
 });
 
-export {createCartSchema,updateCartSchema,getCartSchema}
+export {updateCartSchema,getCartSchema}

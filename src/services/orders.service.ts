@@ -21,7 +21,6 @@ const ordersService = {
         return order
     },
     create: async function(data:string, merchantId:number){
-        //check products and change his column isAvailable are managed with a middleware (check the routes) 
         const merchant = await merchantModel.findOneBy({id: merchantId})
         if(!merchant) throw boom.unauthorized('unauthorized')
         const fullNewOrder:Order = { order: data, state:'in-process', merchant:merchant}
