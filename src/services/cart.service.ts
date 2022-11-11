@@ -35,10 +35,11 @@ const cartService = {
         if(!product) throw boom.notFound('product not found')
         //handle empty cart, repeated product & add normal
         if(!cart.products || cart.products?.length<=0 ) cart.products = [product]
-        else if(cart.products.findIndex(product=>product.id===productId )!==-1) cart.products = cart.products
+        else if(cart.products.findIndex(product=>product.id===productId )!==-1) return cart
         else cart.products = [...cart.products, product]
-
-        if(product.price && cart.totalAmmount) cart.totalAmmount = cart.totalAmmount + product.price
+        product.price = product.price || 0
+        cart.totalAmmount = cart.totalAmmount || 0
+        cart.totalAmmount = cart.totalAmmount + product.price
         const updatedCart = await cartModel.save(cart)
         return updatedCart
     },
@@ -50,7 +51,9 @@ const cartService = {
         if(!cart.products || cart.products?.length<=0 ) throw boom.notFound('cart is empty.') 
         const newProducts = cart.products.filter(product => product.id!==productId)
         cart.products = newProducts
-        if(product.price && cart.totalAmmount) cart.totalAmmount = cart.totalAmmount - product.price
+        product.price = product.price || 0
+        cart.totalAmmount = cart.totalAmmount || 0
+        cart.totalAmmount = cart.totalAmmount - product.price
         const updatedCart = await cartModel.save(cart)
         return updatedCart    
     },
