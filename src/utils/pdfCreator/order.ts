@@ -9,10 +9,8 @@ const fakeOrder =             {
   "order": "{\"buyer\":{\"firstName\":\"Jorge\",\"lastName\":\"Zerpa\",\"email\":\"jorgezerpabuyer@gmail.com\",\"phone\":\"01132232\",\"direction\":{\"houseNumber\":\"73\",\"street\":\"Bolivar\",\"city\":\"Mérida\",\"references\":\"abajo de la plaza\",\"coordinates\":[]}},\"products\":[{\"id\":1,\"name\":\"product name\",\"price\":100}],\"totalAmount\":0,\"paymentMethod\":\"paypal\",\"paymentMethodReceipt\":\"recibo stringifeado\"}"
 }
 
-
-
 async function createOrderPdf(orderData:Order){
-  let html = fs.readFileSync( path.resolve("src/utils/pdfCreator/templates", 'order.html') , "utf8");
+  let html = fs.readFileSync( path.join(__dirname, "src/utils/pdfCreator/templates", 'order.html') , "utf8");
   const order = JSON.parse(orderData.order as string)
   const merchant = orderData.merchant
 
@@ -25,7 +23,7 @@ async function createOrderPdf(orderData:Order){
         totalAmmount : order.totalAmount,
         paymentMethod : order.paymentMethod,
       },
-      path: path.resolve(`src/utils/pdfCreator/outputs/order${orderData.id}${Date.now()}.pdf`),
+      path: path.join(__dirname, `src/utils/pdfCreator/outputs/order${orderData.id}${Date.now()}.pdf`),
       type: "",
     };
     try {
