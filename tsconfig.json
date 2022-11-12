@@ -1,4 +1,7 @@
 {
+  "include": [
+    "src", "decs.d.ts"
+  ],
   "ts-node": {
     "files": true
   },

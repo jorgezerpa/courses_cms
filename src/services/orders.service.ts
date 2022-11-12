@@ -4,6 +4,8 @@ import { Order } from '../database/typeorm/entities/order'
 import { Product } from "../database/typeorm/entities"
 import { Merchant } from "../database/typeorm/entities"
 import { OrderStateType } from '../types/orderState.type'
+import { createOrderPdf } from "../utils/pdfCreator/order"
+import fs from 'fs'
 
 const orderModel = AppDataSource.getRepository(Order)
 const merchantModel = AppDataSource.getRepository(Merchant)
@@ -44,8 +46,12 @@ const ordersService = {
         const result = await orderModel.save(updatedOrder)
         return result
     },
-    createFile: async function(){
-        //create .txt or .pdf or .excel file to save register
+    createFile: async function(orderId:number, merchantId:number){
+        const order = await orderModel.findOne({where:{id:orderId, merchant:{ id:merchantId }}, relations:{merchant:true}})
+        if(!order) throw boom.notFound('order not found')
+        const orderPath = await createOrderPdf(order)
+        if(!orderPath) throw boom.internal('can not create order file. Try it again')        
+        return orderPath
     }
 }
 

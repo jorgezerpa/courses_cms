@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello world!</title>
+  </head>
+  <body>
+    <h1>Orden de compra</h1>
+
+    <div>
+      <h3>comerciante</h3>
+      <p>nombre:{{merchant.firstName}} {{merchant.lastName}}</p>
+      <p>email:{{merchant.email}}</p>
+      <p>teléfono:{{merchant.phone}}</p>
+    </div>
+
+    <div>
+      <h3>comprador</h3>
+      <p>nombre:{{buyer.firstName}} {{buyer.lastName}}</p>
+      <p>email:{{buyer.email}}</p>
+      <p>teléfono:{{buyer.phone}}</p>
+      <p>dirección:</p>
+      <ul>
+        <li>{{buyer.direction.houseNumber}}</li>
+        <li>{{buyer.direction.street}}</li>
+        <li>{{buyer.direction.city}}</li>
+        <li>{{buyer.direction.references}}</li>
+        <li>{{buyer.direction.coordinates}}</li>
+      </ul>
+    </div>
+    
+    <div>
+      <h2>Productos</h2>
+      <ul>
+        {{#each products}}
+        <li>Nombre: {{this.name}}</li>
+        <li>precio: {{this.price}}</li>
+        <br />
+        {{/each}}
+      </ul>
+    </div>
+
+    <div>
+      <h4>total: {{totalAmmount}}</h4>
+      <h6>método de pago: {{paymentMethod}}</h6>
+    </div>
+
+  </body>
+</html>
