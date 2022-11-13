@@ -10,7 +10,7 @@ const fakeOrder =             {
 }
 
 async function createOrderPdf(orderData:Order){
-  let html = fs.readFileSync( path.join(__dirname, "src/utils/pdfCreator/templates", 'order.html') , "utf8");
+  let html = fs.readFileSync( path.resolve("src/utils/pdfCreator/templates", 'order.html'), "utf8");
   const order = JSON.parse(orderData.order as string)
   const merchant = orderData.merchant
 
@@ -23,7 +23,7 @@ async function createOrderPdf(orderData:Order){
         totalAmmount : order.totalAmount,
         paymentMethod : order.paymentMethod,
       },
-      path: path.join(__dirname, `src/utils/pdfCreator/outputs/order${orderData.id}${Date.now()}.pdf`),
+      path: path.join(__dirname, `outputs/order${orderData.id}${Date.now()}.pdf`),
       type: "",
     };
     try {
