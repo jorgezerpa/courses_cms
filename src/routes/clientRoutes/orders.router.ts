@@ -30,7 +30,7 @@ router.get('/getOrderFile/:orderId', passport.authenticate('header', {session:fa
         const merchantId = req.user?.sub as number
         const orderId = parseInt(req.params.orderId) 
         const filePath = await orderService.createFile(orderId, merchantId)
-        res.sendFile(filePath)
+        res.download(filePath)
     } catch (error) {
         next(error)
     }
