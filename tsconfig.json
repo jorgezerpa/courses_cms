@@ -1,7 +1,7 @@
 {
   "include": [
     "src", "decs.d.ts"
-  ],
+, "src/database/typeorm/entities/.ts"  ],
   "ts-node": {
     "files": true
   },

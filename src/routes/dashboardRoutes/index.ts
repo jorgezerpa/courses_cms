@@ -1,16 +1,12 @@
-import express, { Application } from "express"
+import express from "express"
 
-import productsRouter from './products.router'
-import categoriesRouter from './categories.router'
-import merchantsRouter from './merchants.router'
-import authRouter from './auth.router'
-import ordersRouter from './orders.router'
+import programsRouter from './programs.router'
+import sectionsRouter from './sections.router'
+import widgetsRouter from './widgets.router'
 
-const routerDashboard = express.Router()
-  routerDashboard.use('/product', productsRouter);
-  routerDashboard.use('/category', categoriesRouter);
-  routerDashboard.use('/merchant', merchantsRouter);
-  routerDashboard.use('/orders', ordersRouter);
-  routerDashboard.use('/auth', authRouter);
+const routerClient = express.Router()
+  routerClient.use('/programs', programsRouter);
+  routerClient.use('/sections', sectionsRouter);
+  routerClient.use('/widgets', widgetsRouter);
 
-export default routerDashboard;
+export default routerClient;

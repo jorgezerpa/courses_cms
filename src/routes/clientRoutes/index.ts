@@ -1,16 +1,12 @@
-import express, { Application } from "express"
+import express from "express"
 
-import paypalRouter from './paypal.router'
-import productsRouter from './products.router'
-import categoriesRouter from './categories.router'
-import ordersRouter from './orders.router'
-import cartRouter from './cart.router'
+import programsRouter from './programs.router'
+import sectionsRouter from './sections.router'
+import widgetsRouter from './widgets.router'
 
 const routerClient = express.Router()
-  routerClient.use('/products', productsRouter);
-  routerClient.use('/categories', categoriesRouter);
-  routerClient.use('/orders', ordersRouter);
-  routerClient.use('/cart', cartRouter);
-  routerClient.use('/paypal', paypalRouter);
+  routerClient.use('/programs', programsRouter);
+  routerClient.use('/sections', sectionsRouter);
+  routerClient.use('/widgets', widgetsRouter);
 
 export default routerClient;

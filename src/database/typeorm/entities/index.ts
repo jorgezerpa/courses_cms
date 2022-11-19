@@ -1,21 +1,21 @@
-import { Product } from "./product";
-import { Category } from "./category"; 
-import { Merchant } from "./merchant";
-import { PaymentMethod } from "./paypmentMethod";
-import { AuthMerchant } from "./authMerchant";
-import { Shipping } from "./shipping";
-import { Order } from "./order";
-import { Cart } from './cart'
+import { Program } from "./program"
+import { Section } from "./section"
+import { User } from "./user"
+import { Widget } from "./widget"
+import { Admin } from "./admin"
+import { File } from "./media/file"
+import { Image } from "./media/image"
+import { Video } from "./media/video"
 
 export  {
-    Product,
-    Category,
-    Merchant,
-    PaymentMethod,
-    AuthMerchant,
-    Shipping,
-    Order,
-    Cart,
+    Program,
+    Section,
+    User,
+    Widget,
+    Admin,
+    File,
+    Image,
+    Video
 }
 
 
