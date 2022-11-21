@@ -6,26 +6,28 @@ import { handleResponse } from '../../responses/response'
 
 const router:Router = express.Router();
 
-router.post('/', validatorHandler(createWidgetSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
+router.post('/:sectionId', validatorHandler(createWidgetSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
   try {
+    const sectionId = parseInt(req.params.sectionId)
     const widgetData = req.body
-    const widget = await widgetService.create(widgetData);
+    const widget = await widgetService.create(widgetData, sectionId);
     handleResponse(res, 200, 'widget created', {widget})
   } catch (error) {
     next(error)
   }
 });
 
-router.get('/', async(req:Request, res:Response, next:NextFunction) => {
+router.get('/:sectionId', async(req:Request, res:Response, next:NextFunction) => {
   try {
-    const widgets = await widgetService.find();
+    const sectionId = parseInt(req.params.sectionId)
+    const widgets = await widgetService.find(sectionId);
     handleResponse(res, 200, 'widgets list', {widgets})
   } catch (error) {
     next(error)
   }
 });
 
-router.get('/:id', validatorHandler(getWidgetSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
+router.get('/find-one/:id', validatorHandler(getWidgetSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     let widgetId = parseInt(req.params.id)
     const widget = await widgetService.findOne(widgetId);

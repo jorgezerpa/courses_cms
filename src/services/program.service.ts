@@ -11,7 +11,7 @@ const programService = {
         return programs
     },
     findOne: async function(programId:number){
-        const program = await programModel.findOneBy({ id: programId })
+        const program = await programModel.findOne({ where:{ id: programId }})
         if(!program) throw boom.notFound('program not found')
         return program
     },

@@ -6,8 +6,8 @@ const sectionModel = AppDataSource.getRepository(Section)
 const programModel = AppDataSource.getRepository(Program)
 
 const sectionService = {
-    find: async function(){
-        const sections = await sectionModel.find()
+    find: async function(programId:number){
+        const sections = await sectionModel.find({ where: { program: { id:programId } } })
         if(!sections) throw boom.notFound('sections not found')
         return sections
     },
@@ -19,8 +19,7 @@ const sectionService = {
     create: async function(section:Section, programId:number){
         const program = await programModel.findOneBy({ id:programId })
         if(!program) throw boom.notFound('program not found')
-        section.program = program
-        const newSection = await sectionModel.save(section)
+        const newSection = await sectionModel.save({...section, program:program})
         if(!newSection) throw boom.internal('can not create section')
         return newSection
     },

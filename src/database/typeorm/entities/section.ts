@@ -1,10 +1,10 @@
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, Relation, OneToMany, ManyToOne } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation, OneToMany, ManyToOne } from "typeorm"
 import { Program } from "./program"
 import { Widget } from './widget'
 
 @Entity()
 export class Section {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id?: number
 
     @Column({ nullable:false })

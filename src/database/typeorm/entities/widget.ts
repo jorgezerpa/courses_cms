@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, Relation, OneToMany, ManyToOne } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation, OneToMany, ManyToOne } from "typeorm"
 import { Section } from './section'
 import { Video } from "./media/video"
 import { File } from "./media/file"
@@ -6,7 +6,7 @@ import { Image } from "./media/image"
 
 @Entity()
 export class Widget {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id?: number
 
     @Column({ nullable:false })

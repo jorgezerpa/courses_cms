@@ -17,16 +17,17 @@ router.post('/:programId', validatorHandler(createSectionProgramIdSchema, 'param
   }
 });
 
-router.get('/', async(req:Request, res:Response, next:NextFunction) => {
+router.get('/:programId', async(req:Request, res:Response, next:NextFunction) => {
   try {
-    const sections = await sectionService.find();
+    const programId = parseInt(req.params.programId)
+    const sections = await sectionService.find(programId);
     handleResponse(res, 200, 'sections list', {sections})
   } catch (error) {
     next(error)
   }
 });
 
-router.get('/:id', validatorHandler(getSectionSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
+router.get('/find-one/:id', validatorHandler(getSectionSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     let sectionId = parseInt(req.params.id)
     const section = await sectionService.findOne(sectionId);

@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, Relation, OneToMany } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Relation, OneToMany } from "typeorm"
 import { Section } from './section'
 
 @Entity()
 export class Program {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id?: number
 
     @Column({ nullable:false })
