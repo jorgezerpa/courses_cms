@@ -12,6 +12,9 @@ export class Image {
     @Column()
     identifier?: string
 
+    @Column()
+    name?: string
+
     @OneToMany(()=>Widget, widget=>widget.image)
     widgets?:Widget[]
 }

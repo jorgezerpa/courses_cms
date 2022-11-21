@@ -2,7 +2,7 @@ import "reflect-metadata"
 import config from "../../config"
 import { DataSource } from "typeorm"
 import { Admin, Program, Section, User, Widget, File, Video, Image } from "./entities"
-import { origin1668878890852 } from './migrations/1668878890852-origin'
+import { origin1669022988341 } from './migrations/1669022988341-origin'
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
         Admin, Program, Section, User, Widget, File, Video, Image
     ],
     subscribers: [],
-    migrations: [origin1668878890852],
+    migrations: [origin1669022988341],
     // migrationsTableName: "custom_migration_table",
 })
 

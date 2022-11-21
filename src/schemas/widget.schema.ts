@@ -10,17 +10,17 @@ const image=Joi.string().max(100);
 const createWidgetSchema=Joi.object({
     title:title.required(),
     description: description.required(),
-    video:video,
-    file: file,
-    image: image,
+    videoId:video,
+    fileId: file,
+    imageId: image,
 });
 
 const updateWidgetSchema=Joi.object({
     title:title,
     description: description,
-    video:video,
-    file: file,
-    image: image,
+    videoId:video,
+    fileId: file,
+    imageId: image,
 });
 
 const getWidgetSchema=Joi.object({

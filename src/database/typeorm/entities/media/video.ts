@@ -12,6 +12,9 @@ export class Video {
     @Column()
     identifier?: string
 
+    @Column()
+    name?: string
+
     @OneToMany(()=>Widget, widget=>widget.video)
     widgets?:Widget[]
 }

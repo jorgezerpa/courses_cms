@@ -8,12 +8,15 @@ const storage = multer.diskStorage({
         const subfolder = req.body.subfolder || ''
         if(mimetype === 'mp4'){
             cb(null, path.join(basePath, 'videos', subfolder))
+            req.query.type='video'
         }
         if(mimetype === 'jpg' || mimetype === 'png' || mimetype === 'jpeg'){
             cb(null, path.join(basePath, 'images', subfolder))
+            req.query.type='image'
         }
         if(mimetype === 'pdf'){
             cb(null, path.join(basePath, 'files', subfolder))
+            req.query.type='file'
         }
     },
     filename: function (req, file, cb) {

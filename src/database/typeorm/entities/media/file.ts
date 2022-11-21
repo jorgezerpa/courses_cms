@@ -11,6 +11,9 @@ export class File {
 
     @Column()
     identifier?: string
+    
+    @Column()
+    name?: string
 
     @OneToMany(()=>Widget, widget=>widget.file)
     widgets?:Widget[]
