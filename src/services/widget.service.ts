@@ -10,12 +10,12 @@ const fileModel = AppDataSource.getRepository(File)
 
 const widgetService = {
     find: async function(sectionId:number){
-        const widgets = await widgetModel.find({ where: { section: { id: sectionId } } })
+        const widgets = await widgetModel.find({ where: { section: { id: sectionId } }, relations: { image:true, video:true, file:true } })
         if(!widgets) throw boom.notFound('widgets not found')
         return widgets
     },
     findOne: async function(widgetId:number){
-        const widget = await widgetModel.findOneBy({ id: widgetId })
+        const widget = await widgetModel.findOne({ where:{id: widgetId}, relations:{ image:true, video:true, file:true } })
         if(!widget) throw boom.notFound('widget not found')
         return widget
     },
@@ -28,7 +28,7 @@ const widgetService = {
         return newWidget
     },
     update: async function(widgetId:number, changes:Widget){
-        const widget = await widgetModel.findOneBy({ id: widgetId })
+        const widget = await widgetModel.findOne({ where:{id: widgetId}, relations:{ image:true, video:true, file:true } } )
         if(!widget) throw boom.notFound('widget not found')
         const updatedwidget = { ...widget, ...changes }
         const result = await widgetModel.save(updatedwidget)
@@ -41,7 +41,7 @@ const widgetService = {
         const result = await widgetModel.remove(widget)
         if(!result) throw boom.internal('can not delete widget')
         return `widget ${widgetId} deleted`
-    }
+    },
 }
 
 

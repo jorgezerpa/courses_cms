@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/zerpcdkk/commerce-api.zerpacode.com
+    - export DEPLOYPATH=/home/zerpcdkk/zerpasw.zerpacode.com
     - /bin/cp -r * $DEPLOYPATH

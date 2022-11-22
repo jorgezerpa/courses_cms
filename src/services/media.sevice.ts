@@ -33,6 +33,7 @@ const programService = {
         if(!asset) throw boom.notFound(type + 'not found')
         const updatedAsset = { ...asset, ...changes }
         const result = mediaModel[type].save(updatedAsset)
+        if(changes.path && asset.path) fs.unlink(asset.path, ()=>{})
         return result
     },
     delete: async function(assetId:number, type:'video'|'image'|'file'){

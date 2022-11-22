@@ -29,10 +29,11 @@ router.get('/', validatorHandler(filterMediaSchema, 'query') ,async(req:Request,
   }
 });
 
-router.patch('/:id', upload.single(''), validatorHandler(createMediaSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
+router.patch('/:id', upload.single('asset'), validatorHandler(createMediaSchema, 'body'), async(req:Request, res:Response, next:NextFunction) => {
   try {
         const assetId = parseInt(req.params.id)
         const data = req.body
+        if(req.file) data.path = req.file.path
         const type:'video'|'image'|'file' = req.query.type as 'video'|'image'|'file'
         const result = await mediaService.update(assetId, type, data)
         handleResponse(res, 200, `${type} updated`, result)  

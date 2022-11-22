@@ -3,13 +3,15 @@ import sectionService from '../../services/section.service'
 import { getSectionSchema, createSectionSchema, updateSectionSchema, createSectionProgramIdSchema } from '../../schemas/section.schema'
 import validatorHandler from '../../middlewares/validator.handler'
 import { handleResponse } from '../../responses/response'
+import upload from '../../utils/multer'
 
 const router:Router = express.Router();
 
-router.post('/:programId', validatorHandler(createSectionProgramIdSchema, 'params'), validatorHandler(createSectionSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
+router.post('/:programId', validatorHandler(createSectionProgramIdSchema, 'params'), upload.single('coverImage'), validatorHandler(createSectionSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
   try {
     const programId = parseInt(req.params.programId) 
     const sectionData = req.body
+    sectionData.coverImage = req.file?.path
     const section = await sectionService.create(sectionData, programId);
     handleResponse(res, 200, 'section created', {section})
   } catch (error) {
@@ -37,10 +39,11 @@ router.get('/find-one/:id', validatorHandler(getSectionSchema, 'params'), async(
   }
 });
 
-router.patch('/:id', validatorHandler(getSectionSchema, 'params'), validatorHandler(updateSectionSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
+router.patch('/:id', validatorHandler(getSectionSchema, 'params'), validatorHandler(updateSectionSchema, 'body'), upload.single('coverImage'), async(req:Request, res:Response, next:NextFunction) => {
   try {
     let sectionId = parseInt(req.params.id)
     const changes = req.body
+    if(req.file){ changes.coverImage = req.file.path }
     const section = await sectionService.update(sectionId, changes);
     handleResponse(res, 200, 'section updated', {section})
   } catch (error) {

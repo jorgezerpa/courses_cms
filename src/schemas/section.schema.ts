@@ -11,7 +11,6 @@ const type=Joi.string().max(100);
 const createSectionSchema=Joi.object({
     name:name.required(),
     description: description.required(),
-    coverImage: coverImage.required(),
     widgetsOrder: widgetsOrder.required(),
     type:type.required(),
 });
