@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import boom from '@hapi/boom'
-import { Product } from '../database/typeorm/entities/product'
 import AppDataSource from "../database/typeorm"
 
 const productModel = AppDataSource.getRepository(Product)
