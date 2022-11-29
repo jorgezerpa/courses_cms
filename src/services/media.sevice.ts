@@ -28,6 +28,11 @@ const programService = {
         media.videos = await videoModel.find()
         return media
     },
+    findOne: async function(assetId:number, type:'video'|'image'|'file'){
+        const asset = await mediaModel[type].findOneBy({ id:assetId })
+        if(!asset) throw boom.notFound(type + 'not found')
+        return asset
+    },
     update: async function(assetId:number, type:'video'|'image'|'file', changes:Video|Image|File){
         const asset = await mediaModel[type].findOneBy({ id:assetId })
         if(!asset) throw boom.notFound(type + 'not found')

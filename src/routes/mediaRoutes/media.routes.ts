@@ -42,6 +42,17 @@ router.patch('/:id', upload.single('asset'), validatorHandler(createMediaSchema,
   }
 });
 
+router.get('/:id', upload.single('asset'), validatorHandler(getMediaSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
+  try {
+        const assetId = parseInt(req.params.id)
+        const type:'video'|'image'|'file' = req.query.type as 'video'|'image'|'file'
+        const result = await mediaService.findOne(assetId, type)
+        handleResponse(res, 200, `asset`, result)  
+  } catch (error) {
+    next(error)
+  }
+});
+
 router.delete('/:id', validatorHandler(getMediaSchema, 'params'), async(req:Request, res:Response, next:NextFunction) => {
   try {
         const assetId = parseInt(req.params.id)
