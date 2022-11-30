@@ -3,6 +3,7 @@ import config from "../../config"
 import { DataSource } from "typeorm"
 import { Admin, Program, Section, User, Widget, File, Video, Image } from "./entities"
 import { origin1669022988341 } from './migrations/1669022988341-origin'
+import { origin1669802403491 } from "./migrations/1669802403491-origin"
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -18,7 +19,7 @@ export const AppDataSource = new DataSource({
         Admin, Program, Section, User, Widget, File, Video, Image
     ],
     subscribers: [],
-    migrations: [origin1669022988341],
+    migrations: [origin1669022988341, origin1669802403491],
     // migrationsTableName: "custom_migration_table",
 })
 

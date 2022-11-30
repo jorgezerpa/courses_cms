@@ -58,7 +58,8 @@ router.delete('/:id', validatorHandler(getMediaSchema, 'params'), async(req:Requ
         const assetId = parseInt(req.params.id)
         const type:'video'|'image'|'file' = req.query.type as 'video'|'image'|'file'
         const result = await mediaService.delete(assetId, type)
-        handleResponse(res, 200, 'asset deleted', result)  
+        console.log('RESULT:', result)
+        handleResponse(res, 200, 'asset deleted', {result})  
   } catch (error) {
     next(error)
   }

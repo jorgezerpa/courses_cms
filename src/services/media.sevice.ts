@@ -1,7 +1,7 @@
 import boom from "@hapi/boom"
 import AppDataSource from "../database/typeorm"
 import fs from 'fs'
-import { Video, Image, File } from "../database/typeorm/entities"
+import { Video, Image, File, Section } from "../database/typeorm/entities"
 
 const videoModel = AppDataSource.getRepository(Video)
 const imageModel = AppDataSource.getRepository(Image)
@@ -43,11 +43,10 @@ const programService = {
     },
     delete: async function(assetId:number, type:'video'|'image'|'file'){
         const asset = await mediaModel[type].findOneBy({ id:assetId })
-        //delete file
         if(!asset) throw boom.notFound(type + 'not found')
-        if(!asset.path) throw boom.internal('can not delete file. Not path provided')
-        fs.unlink(asset.path, ()=>{})
-        const result = mediaModel[type].remove(asset)
+        const result = await mediaModel[type].remove(asset)
+        // console.log('RESULT:',result)
+        if(asset.path && asset.path!=="")await fs.promises.unlink(asset.path)
         if(!result) throw boom.internal('can not delete asset')
         return `${type} ${assetId} deleted`
     }

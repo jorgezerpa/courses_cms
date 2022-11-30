@@ -15,13 +15,13 @@ export class Widget {
     @Column()
     description?: string
 
-    @ManyToOne(()=>Video, video=>video.widgets)
+    @ManyToOne(()=>Video, video=>video.widgets, { onDelete:"SET NULL" })
     video?:Video
 
-    @ManyToOne(()=>Image, image=>image.widgets)
+    @ManyToOne(()=>Image, image=>image.widgets, { onDelete:"SET NULL" })
     image?:Video
 
-    @ManyToOne(()=>File, file=>file.widgets)
+    @ManyToOne(()=>File, file=>file.widgets, { onDelete:"SET NULL" })
     file?:Video
 
     @ManyToOne(()=>Section, section=>section.widgets, { onDelete:'CASCADE' })
