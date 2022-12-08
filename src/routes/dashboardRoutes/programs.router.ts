@@ -3,7 +3,6 @@ import programService from '../../services/program.service'
 import { getProgramSchema, createProgramSchema, updateProgramSchema } from '../../schemas/program.schema'
 import validatorHandler from '../../middlewares/validator.handler'
 import { handleResponse } from '../../responses/response'
-
 const router:Router = express.Router();
 
 router.post('/', validatorHandler(createProgramSchema, 'body'),  async(req:Request, res:Response, next:NextFunction) => {
