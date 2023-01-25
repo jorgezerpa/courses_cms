@@ -1,9 +1,8 @@
 import "reflect-metadata"
-import config from "../../config"
+import config from "../config"
 import { DataSource } from "typeorm"
-import { Admin, Program, Section, User, Widget, File, Video, Image } from "./entities"
-import { origin1669022988341 } from './migrations/1669022988341-origin'
-import { origin1669802403491 } from "./migrations/1669802403491-origin"
+import { Course, Lesson, Section, User } from "./entities"
+import { origin1674658209781 } from "./migrations/1674658209781-origin"
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -16,17 +15,17 @@ export const AppDataSource = new DataSource({
     // synchronize: true,
     logging: false,
     entities: [
-        Admin, Program, Section, User, Widget, File, Video, Image
+        User, Course, Section, Lesson
     ],
     subscribers: [],
-    migrations: [origin1669022988341, origin1669802403491],
+    migrations: [ origin1674658209781 ],
     // migrationsTableName: "custom_migration_table",
 })
 
 
 // //execute the first time on dev server an then comment OR change this to a migration
-AppDataSource.initialize()
-    .then(() => {
-        console.log('DB connected')
-    })
-    .catch((error) => console.log(error))
+// AppDataSource.initialize()
+//     .then(() => {
+//         console.log('DB connected')
+//     })
+//     .catch((error) => console.log(error))

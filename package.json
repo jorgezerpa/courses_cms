@@ -8,8 +8,8 @@
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc -p .",
-    "migrate:generate:origin": "npx typeorm-ts-node-esm migration:generate ./src/database/typeorm/migrations/origin -d ./src/database/typeorm/data-source.ts",
-    "migrate:run": "npx typeorm-ts-node-esm -d ./src/database/typeorm/data-source.ts migration:run",
+    "migrate:generate": "npx typeorm-ts-node-esm migration:generate ./src/database/migrations/origin -d ./src/database/data-source.ts",
+    "migrate:run": "npx typeorm-ts-node-esm -d ./src/database/data-source.ts migration:run",
     "migrate:revert": "npx typeorm-ts-node-esm -d ./src/database/typeorm/data-source.ts migration:revert"
   },
   "keywords": [],
