@@ -1,10 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm"
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm"
 import { Course } from "./course"
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    id?: number
+    @PrimaryColumn()
+    id?: string
 
     // USER INFO
     @Column()
@@ -20,7 +20,7 @@ export class User {
     phone?: string
 
     //RELATIONS 
-    @OneToMany(()=>Course, (course)=>course.user, { onDelete:"CASCADE" })
+    @OneToMany(()=>Course, (course)=>course.user, { onDelete:"CASCADE", cascade:true })
     courses?: Course[]
 }
 

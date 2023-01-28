@@ -17,7 +17,7 @@ export class Course {
     @ManyToOne(()=>User, (user)=>user.courses)
     user?: User
     
-    @OneToMany(()=>Section, (section)=>section.course, { onDelete:'CASCADE' })
+    @OneToMany(()=>Section, (section)=>section.course, { onDelete:'CASCADE', cascade:true })
     sections?:Section[]
 
 }

@@ -8,8 +8,8 @@ declare global {
       imagePath: undefined|string
     }
     interface User {
-      id: number;
-      sub: number;
+      id: string;
+      sub: string;
     }
   }
   namespace NodeJS {

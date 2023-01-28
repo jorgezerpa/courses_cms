@@ -20,7 +20,7 @@ export class Section {
     @ManyToOne(()=>Course, (course)=>course.sections, { onDelete:'CASCADE' })
     course?:Course
 
-    @OneToMany(()=>Lesson, (lesson)=>lesson.section, { onDelete:'CASCADE' })
+    @OneToMany(()=>Lesson, (lesson)=>lesson.section, { onDelete:'CASCADE', cascade:true })
     lessons?:Lesson[]
 
 }

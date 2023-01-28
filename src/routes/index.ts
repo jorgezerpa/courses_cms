@@ -1,15 +1,17 @@
 import express, { Application } from "express"
 
-import clientRouter from './clientRoutes'
-import dashboardRouter from './dashboardRoutes'
-import mediaRouter from './mediaRoutes'
+import coursesRouter from './courses.router'
+import sectionsRouter from './sections.router'
+import lessonsRouter from './lessons.router'
+import userRouter from './user.router'
 
 function routerApi(app:Application) {
   const router = express.Router();
   app.use('/api/v1', router);
-  router.use('/client', clientRouter);
-  router.use('/dashboard', dashboardRouter);
-  router.use('/media', mediaRouter);
+  router.use('/user', userRouter);
+  router.use('/courses', coursesRouter);
+  router.use('/sections', sectionsRouter);
+  router.use('/lessons', lessonsRouter);
 }
 
 
