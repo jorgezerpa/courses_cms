@@ -8,12 +8,10 @@ const resources=Joi.string().max(100);
 
 const createLessonSchema=Joi.object({
     title:title.required(),
-    description: description.required(),
 });
 
 const updateLessonSchema=Joi.object({
     title:title,
-    description: description,
 });
 
 const getLessonSchema=Joi.object({

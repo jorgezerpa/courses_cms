@@ -3,16 +3,17 @@ import { handleResponse } from '../responses/response';
 import lessonService from '../services/lesson.service';
 import { createLessonSchema, getLessonSchema, updateLessonSchema } from '../schemas/lesson.schema'
 import validatorHandler from '../middlewares/validator.handler';
+import { createSecretKey } from 'crypto';
 
 const router:Router = express.Router();
 
 router.post('/:id', validatorHandler(createLessonSchema, 'body'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth|1';
-        const courseId = parseInt(req.params.id)
-        const sectionData = req.body;
-        const newSection = await lessonService.create(userId, courseId, sectionData)
-        handleResponse(res, 201, 'section created.', newSection)
+        const userId = req.user?.sub || 'auth0|1234';
+        const sectionId = parseInt(req.params.id)
+        const lessonData = req.body;
+        const newLesson = await lessonService.create(userId, sectionId, lessonData)
+        handleResponse(res, 201, 'lesson created.', newLesson)
     } catch (error) {
         next(error)
     }
@@ -20,33 +21,33 @@ router.post('/:id', validatorHandler(createLessonSchema, 'body'), async(req:Requ
 
 router.get('/:id', async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth|1';
+        const userId = req.user?.sub || 'auth0|1234';
         const courseId = parseInt(req.params.id);
-        const sections = await lessonService.list(userId, courseId);
-        handleResponse(res, 200, 'courses list', sections)
+        const lessons = await lessonService.list(userId, courseId);
+        handleResponse(res, 200, 'section list', {lessons})
     } catch (error) {
         next(error)
     }
 })
 
-router.get('/:id', validatorHandler(getLessonSchema, 'params'), async(req:Request, res:Response, next:NextFunction)=>{
+router.get('/get-lesson/:id', validatorHandler(getLessonSchema, 'params'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth|1';
-        const sectionId = parseInt(req.params.id);
-        const section = await lessonService.listOne(userId, sectionId);
-        handleResponse(res, 200, 'section', section)
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const lesson = await lessonService.listOne(userId, lessonId);
+        handleResponse(res, 200, 'lesson', lesson)
     } catch (error) {
         next(error)
     }
 })
 
-router.patch('/:id', validatorHandler(updateLessonSchema, 'params'), async(req:Request, res:Response, next:NextFunction)=>{
+router.patch('/:id', validatorHandler(getLessonSchema, 'params'), validatorHandler(updateLessonSchema, 'body'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth|1';
-        const sectionId = parseInt(req.params.id);
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
         const data = req.body;
-        const section = await lessonService.updateOne(userId, sectionId, data);
-        handleResponse(res, 200, 'section updated', section)
+        const lesson = await lessonService.updateOne(userId, lessonId, data);
+        handleResponse(res, 200, 'section updated', lesson)
     } catch (error) {
         next(error)
     }
@@ -54,9 +55,9 @@ router.patch('/:id', validatorHandler(updateLessonSchema, 'params'), async(req:R
 
 router.delete('/:id', validatorHandler(getLessonSchema, 'params') , async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth|1';
-        const sectionId = parseInt(req.params.id);
-        const result = await lessonService.deleteOne(userId, sectionId);
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const result = await lessonService.deleteOne(userId, lessonId);
         handleResponse(res, 200, 'section deleted', result)
     } catch (error) {
         next(error)

@@ -7,15 +7,14 @@ const sectionModel = AppDataSource.getRepository(Section)
 
 export default {
     async create(userId:string, courseId:number, sectionData:any){
-        //get course and set is a as prop on course cretion. This is to maintain relation 
-        const course = courseModel.findOne({ where:{ user:{id:userId}, id: courseId } })
+        const course = await courseModel.findOne({ where:{ user:{id:userId}, id: courseId } })
         if(!course) throw boom.badRequest('course to add section not found.')
-        const result = await sectionModel.create({ course:course, ...sectionData })
+        const result = await sectionModel.save({ course:course, ...sectionData })
         if(!result) throw boom.badRequest('can not create section.')
         return result
     },
     async list(userId:string, courseId:number){
-        const result = await sectionModel.find({ where: { course: { id:courseId }  }})
+        const result = await sectionModel.find({ where: { course: { id:courseId, user:{id:userId} }  }})
         if(!result) throw boom.internal('can not list sections.')
         return result
     },

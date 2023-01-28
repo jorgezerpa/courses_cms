@@ -13,9 +13,6 @@ export class Section {
     @Column()
     description?: string
     
-    @Column({ nullable:false })
-    type?: string
-    
     //RELATIONS
     @ManyToOne(()=>Course, (course)=>course.sections, { onDelete:'CASCADE' })
     course?:Course
