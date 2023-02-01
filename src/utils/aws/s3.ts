@@ -2,6 +2,7 @@ import { S3Client, PutObjectCommand, ListObjectsCommand, GetObjectCommand, Creat
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import config from '../../config'
 import fs from 'fs'
+import { User } from '../../database/entities'
 
 const client = new S3Client({
     region: config.AWS_BUCKET_REGION,
@@ -11,22 +12,26 @@ const client = new S3Client({
     },
 })
 
-
-//HANDLE BUCKETS
-export async function createBucket(userId:string){
-    const bucketName = 'aws-' + Math.random()*10000;
+/* ---------------------------------------------
+                HANDLE BUCKETS
+   -------------------------------------------- */ 
+   //function called when create a new user
+export async function createBucket(user:User){
+    // TODO --> asign a better name to bucket or sanitize data to always provide a valid bucket name
+    const bucketName = user.firstName as string + user.lastName as string + 'aws-' + Math.random()*10000;
     const command = new CreateBucketCommand({ Bucket: bucketName })
     const result = await client.send(command)
     return { bucketName, result }
 }
 
 
-//HANDLE BUCKET ITEMS
+/* ---------------------------------------------
+                HANDLE BUCKETS' FILES
+   -------------------------------------------- */ 
 export async function uploadFile(bucketname:string, file:string, extension:string){
     const stream = fs.createReadStream(file)
     const key = bucketname+Math.random()*10000+file+'.'+extension
     const uploadParams = {
-        // Bucket: config.AWS_BUCKET_NAME,
         Bucket: bucketname,
         Key: key,
         Body: stream
@@ -45,7 +50,6 @@ export async function getFiles(){
 }
 
 export async function getFile(bucketName:string, fileKey:string){
-    const toReturn = {}
     const command = new GetObjectCommand({
         Bucket: bucketName,
         Key:fileKey,

@@ -65,7 +65,7 @@ router.delete('/:id', validatorHandler(getLessonSchema, 'params') , async(req:Re
 })
 
 
-//VIDEOS & RESOURCES
+//VIDEOS
 router.get('/assets/getVideo/:id', async(req:Request, res:Response, next:NextFunction)=>{
     try {
         const userId = req.user?.sub || 'auth0|1234';
@@ -110,6 +110,9 @@ router.delete('/assets/deleteVideo/:id', async(req:Request, res:Response, next:N
 })
 
 
+// RESOURCES
+
+// lets go with happiness my friend! you are the best <3
 
 export default router;
 

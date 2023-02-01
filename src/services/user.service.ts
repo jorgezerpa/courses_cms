@@ -11,7 +11,7 @@ export default {
         const newUser = await userModel.save({ ...userData })
         if(!newUser) throw boom.badRequest('can not create user.')
         //create s3 bucket
-        const bucketResult = await createBucket(newUser.id)
+        const bucketResult = await createBucket(newUser)
         //set to user
         newUser.s3bucketName = bucketResult.bucketName
         const newUserWithBucket = await userModel.save(newUser)
