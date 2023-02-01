@@ -5,7 +5,6 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import routerApi from './routes';
 import { logErrors, errorHandler, boomErrorHandler } from './middlewares/error.handler'
-import { uploadFile, getFiles, getFile } from './utils/aws/s3'
 
 dotenv.config()
 
@@ -23,12 +22,6 @@ routerApi(app);
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
-
-app.get('/test', async(req, res)=>{
-  const result = await getFiles()
-  console.log(result)
-  res.send('im here')
-})
 
 app.listen(port, ():void => {
   console.log('app listen in port ' +  port);

@@ -16,8 +16,8 @@ export class Lesson {
     @Column({ nullable:true, type:'text' })
     description?: string | null
 
-    @OneToMany(()=>Resource, (resource)=>resource.lesson, { onDelete:'CASCADE' } )
-    resources?: string
+    @OneToMany(()=>Resource, (resource)=>resource.lesson, { onDelete:'CASCADE', cascade:true } )
+    resources?: Resource[]
 
     @ManyToOne(()=>Section, section=>section.lessons, { onDelete:'CASCADE' })
     section?:Section   

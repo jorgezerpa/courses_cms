@@ -41,13 +41,15 @@ export async function uploadFile(bucketname:string, file:string, extension:strin
     return { key:key }
 }
 
-export async function getFiles(){
-    const command = new ListObjectsCommand({
-        Bucket: config.AWS_BUCKET_NAME
-    })   
-    const result = await client.send(command)
-    return result
-}
+//TODO --> IMPLEMENT THIS FOR FETCH JUST VIDEOS OR JUST RESOURCES --> USE TAGS?
+// export async function getFiles(bucketName:string, fileKey:string){
+//     const command = new ListObjectsCommand({
+//         Bucket: bucketName,
+        
+//     })   
+//     const result = await client.send(command)
+//     return result
+// }
 
 export async function getFile(bucketName:string, fileKey:string){
     const command = new GetObjectCommand({

@@ -111,8 +111,50 @@ router.delete('/assets/deleteVideo/:id', async(req:Request, res:Response, next:N
 
 
 // RESOURCES
+router.get('/assets/getResources/:id', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const result = await lessonService.getResources(userId, lessonId);
+        handleResponse(res, 200, 'video url', result||{})
+    } catch (error) {
+        next(error)
+    }
+})
+router.post('/assets/addResource/:id', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const resourcePath = (req.files?.resource as UploadedFile).tempFilePath;
+        console.log(resourcePath) 
+        const result = await lessonService.addResource(userId, lessonId, resourcePath, 'png');
+        handleResponse(res, 200, 'video uploaded', result)
+    } catch (error) {
+        next(error)
+    }
+})
+router.patch('/assets/updateResource/:id', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const videoPath = (req.files?.video as UploadedFile).tempFilePath; 
+        const result = await lessonService.updateVideo(userId, lessonId, videoPath, 'png');
+        handleResponse(res, 200, 'video updated', result)
+    } catch (error) {
+        next(error)
+    }
+})
+router.delete('/assets/deleteVideo/:id', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const result = await lessonService.removeVideo(userId, lessonId);
+        handleResponse(res, 200, 'video deleted', result)
+    } catch (error) {
+        next(error)
+    }
+})
 
-// lets go with happiness my friend! you are the best <3
 
 export default router;
 
