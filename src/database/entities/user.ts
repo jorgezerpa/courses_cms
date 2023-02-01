@@ -18,6 +18,9 @@ export class User {
     
     @Column()
     phone?: string
+    
+    @Column({ nullable:true })
+    s3bucketName?: string
 
     //RELATIONS 
     @OneToMany(()=>Course, (course)=>course.user, { onDelete:"CASCADE", cascade:true })

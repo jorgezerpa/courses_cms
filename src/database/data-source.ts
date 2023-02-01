@@ -5,6 +5,7 @@ import { Course, Lesson, Section, User, Resource } from "./entities"
 import { origin1674903411354 } from "./migrations/1674903411354-origin"
 import { origin1674906081654 } from "./migrations/1674906081654-origin"
 import { origin1674908283524 } from "./migrations/1674908283524-origin"
+import { origin1675187741845 } from "./migrations/1675187741845-origin"
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -20,7 +21,7 @@ export const AppDataSource = new DataSource({
         User, Course, Section, Lesson, Resource
     ],
     subscribers: [],
-    migrations: [origin1674903411354, origin1674906081654, origin1674908283524],
+    migrations: [origin1674903411354, origin1674906081654, origin1674908283524, origin1675187741845],
     // migrationsTableName: "custom_migration_table",
 })
 

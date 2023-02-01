@@ -3,7 +3,7 @@ import { handleResponse } from '../responses/response';
 import lessonService from '../services/lesson.service';
 import { createLessonSchema, getLessonSchema, updateLessonSchema } from '../schemas/lesson.schema'
 import validatorHandler from '../middlewares/validator.handler';
-import { createSecretKey } from 'crypto';
+import { UploadedFile } from 'express-fileupload';
 
 const router:Router = express.Router();
 
@@ -63,6 +63,53 @@ router.delete('/:id', validatorHandler(getLessonSchema, 'params') , async(req:Re
         next(error)
     }
 })
+
+
+//VIDEOS & RESOURCES
+router.get('/assets/getVideo/:id', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const result = await lessonService.getVideo(userId, lessonId);
+        handleResponse(res, 200, 'video url', result)
+    } catch (error) {
+        next(error)
+    }
+})
+router.post('/assets/addVideo/:id', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const videoPath = (req.files?.video as UploadedFile).tempFilePath; 
+        const result = await lessonService.addVideo(userId, lessonId, videoPath, 'png');
+        handleResponse(res, 200, 'video uploaded', result)
+    } catch (error) {
+        next(error)
+    }
+})
+router.patch('/assets/updateVideo/:id', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const videoPath = (req.files?.video as UploadedFile).tempFilePath; 
+        const result = await lessonService.updateVideo(userId, lessonId, videoPath, 'png');
+        handleResponse(res, 200, 'video updated', result)
+    } catch (error) {
+        next(error)
+    }
+})
+router.delete('/assets/deleteVideo/:id', async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const userId = req.user?.sub || 'auth0|1234';
+        const lessonId = parseInt(req.params.id);
+        const result = await lessonService.removeVideo(userId, lessonId);
+        handleResponse(res, 200, 'video deleted', result)
+    } catch (error) {
+        next(error)
+    }
+})
+
+
 
 export default router;
 

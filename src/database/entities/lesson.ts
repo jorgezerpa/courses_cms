@@ -10,11 +10,11 @@ export class Lesson {
     @Column()
     title?: string
 
-    @Column({ nullable:true })
-    video?: string
+    @Column({ nullable:true, type:'varchar' })
+    video?: string | null
 
-    @Column({ nullable:true })
-    description?: string
+    @Column({ nullable:true, type:'text' })
+    description?: string | null
 
     @OneToMany(()=>Resource, (resource)=>resource.lesson, { onDelete:'CASCADE' } )
     resources?: string

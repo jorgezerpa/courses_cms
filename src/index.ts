@@ -16,7 +16,7 @@ app.use(cors({credentials:true}))
 app.use(express.json({limit: '50mb'})) 
 app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
-app.use(fileUpload({ useTempFiles: true, tempFileDir: './uploads' }))
+app.use(fileUpload({ useTempFiles: true, tempFileDir: './public/uploads' }))
 
 routerApi(app);
 
@@ -24,22 +24,10 @@ app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
-app.get('/uploadfile', async(req, res)=>{
-  await uploadFile('./public/images/navbarIcon')
-  res.send('works')
-})
-
-app.get('/getFiles', async(req, res)=>{
-  const files = await getFiles()
-  res.json({result:files})
-})
-
-app.get('/getFile', async(req, res)=>{
-  const file = await getFile()
-  console.log(file)
-  // res.send('testing')
-  // return
-  res.json(file.$metadata)
+app.get('/test', async(req, res)=>{
+  const result = await getFiles()
+  console.log(result)
+  res.send('im here')
 })
 
 app.listen(port, ():void => {

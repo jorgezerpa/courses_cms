@@ -3,3 +3,8 @@ DB_USER='root'
 DB_PASSWORD='1234'
 DB_HOST='localhost'
 DB_PORT=3306
+
+AWS_BUCKET_NAME='string'
+AWS_BUCKET_REGION='string'
+AWS_ACCESS_KEY='string'
+AWS_SECRET_ACCESS_KEY='string'
