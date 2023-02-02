@@ -25,7 +25,6 @@ export default {
         const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}}}}, relations:{resources:true} })
         if(!lesson) throw boom.notFound('lesson not found.')
         if(!lesson.resources) throw boom.notFound('lesson not have resources.')
-        console.log(lesson.resources)
         const resources = []
         for await (const resource of lesson.resources) {
             const resourceURL = await getFile(user.s3bucketName as string, resource.key as string)
@@ -37,7 +36,7 @@ export default {
         const user = await userModel.findOneBy({ id:userId })
         if(!user) throw boom.badRequest('user not found')
         const resource = await resourceModel.findOne({ where: { id:resourceId, lesson: {section:{ course:{user:{id:userId}}}}}})
-        if(!resource) throw boom.notFound('lesson to add video not found.')
+        if(!resource) throw boom.notFound('lesson to add resource not found.')
         if(resourcePath){
             const addToS3Result = await uploadFile(user.s3bucketName as string, resourcePath, extension ) 
             await deleteFile(user.s3bucketName as string, resource.key as string) 
@@ -54,7 +53,7 @@ export default {
         if(!resource.key) throw boom.notFound('this resource do not have any asset.')
         const s3result = await deleteFile(user.s3bucketName as string, resource.key)
         resourceModel.remove(resource)
-        return { message:'resource'+resource.id+'deleted' }
+        return { message:'resource '+resource.id+' deleted' }
     },
 
 }
