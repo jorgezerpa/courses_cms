@@ -14,6 +14,8 @@ export default {
         return result
     },
     async list(userId:string, courseId:number){
+        const course = await courseModel.findOneBy({id:courseId, user: { id:userId }})
+        if(!course) throw boom.badRequest('course to fetch sections do not exists.')
         const result = await sectionModel.find({ where: { course: { id:courseId, user:{id:userId} }  }})
         if(!result) throw boom.internal('can not list sections.')
         return result

@@ -17,8 +17,7 @@ const client = new S3Client({
    -------------------------------------------- */ 
    //function called when create a new user
 export async function createBucket(user:User){
-    // TODO --> asign a better name to bucket or sanitize data to always provide a valid bucket name
-    const bucketName = user.firstName as string + user.lastName as string + 'aws-' + Math.random()*10000;
+    const bucketName = user.s3Identifier as string + "-" + Date.now();
     const command = new CreateBucketCommand({ Bucket: bucketName })
     const result = await client.send(command)
     return { bucketName, result }

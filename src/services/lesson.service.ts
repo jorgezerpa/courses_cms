@@ -17,6 +17,8 @@ export default {
         return result
     },
     async list(userId:string, sectionId:number){
+        const section = await sectionModel.findOneBy({id:sectionId, course:{user:{id:userId}}})
+        if(!section) throw boom.badRequest('section to fetch lesson does not exists.')
         const result = await lessonModel.find({ 
             where: { 
                 section:{ 
@@ -35,7 +37,7 @@ export default {
         if(!lesson) throw boom.notFound('lesson not found.')
         const lessonToReturn:any = lesson
         if(lesson.video) {
-            const result = await getFile(user.s3bucketName as string, lesson.video)
+            const result = await getFile(user.s3VideosBucketName as string, lesson.video)
             lessonToReturn.videoURL = result.url
         }
         return lessonToReturn
@@ -61,91 +63,41 @@ export default {
         const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}} } }})
         if(!lesson) throw boom.notFound('lesson not found.')
         if(!lesson.video) throw boom.notFound('this lesson do not have a video.')
-        const result = await getFile(user.s3bucketName as string, lesson.video)
-        return result
+        const result = await getFile(user.s3VideosBucketName as string, lesson.video)
+        return { video:lesson }
     },
     async addVideo(userId:string, lessonId:number, videoPath:string, extension:string){
         const user = await userModel.findOneBy({ id:userId })
         if(!user) throw boom.badRequest('user not found')
         const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}} } } })
         if(!lesson) throw boom.notFound('lesson to add video not found.')
-        const s3result = await uploadFile(user.s3bucketName as string, videoPath, extension)
+        const s3result = await uploadFile(user.s3VideosBucketName as string, videoPath, extension)
         lesson.video = s3result.key;
         lessonModel.save(lesson)
-        return lesson
+        return { lesson:lesson }
     },
     async updateVideo(userId:string, lessonId:number, videoPath:string, extension:string){
         const user = await userModel.findOneBy({ id:userId })
         if(!user) throw boom.badRequest('user not found')
         const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}} } }})
-        if(!lesson) throw boom.notFound('lesson to add video not found.')
+        if(!lesson) throw boom.notFound('lesson not found.')
         if(lesson.video){ // delete from s3 and field
-            const s3result = await deleteFile(user.s3bucketName as string, lesson.video)
+            const s3result = await deleteFile(user.s3VideosBucketName as string, lesson.video)
         }
-        const s3result = await uploadFile(user.s3bucketName as string, videoPath, extension)
+        const s3result = await uploadFile(user.s3VideosBucketName as string, videoPath, extension)
         lesson.video = s3result.key;
         lessonModel.save(lesson)
-        return lesson
+        return { lesson:lesson }
     },
     async removeVideo(userId:string, lessonId:number){
         const user = await userModel.findOneBy({ id:userId })
         if(!user) throw boom.badRequest('user not found')
         const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}} } }})
-        if(!lesson) throw boom.notFound('lesson to add video not found.')
+        if(!lesson) throw boom.notFound('lesson to delete video not found.')
         if(!lesson.video) throw boom.notFound('this lesson do not have a video to delete.')
-        const s3result = await deleteFile(user.s3bucketName as string, lesson.video)
+        const s3result = await deleteFile(user.s3VideosBucketName as string, lesson.video)
         lesson.video = null;
         lessonModel.save(lesson)
-        return lesson
+        return { lesson:lesson }
     },
-
-    //RESOURCES
-    async getResources(userId:string, lessonId:number){
-        const user = await userModel.findOneBy({ id:userId })
-        if(!user) throw boom.badRequest('user not found')
-        const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}}}}, relations:{resources:true} })
-        if(!lesson) throw boom.notFound('lesson not found.')
-        if(!lesson.resources) throw boom.notFound('lesson not have resources.')
-        const resources = []
-        for await (const resource of lesson.resources) {
-            const resourceURL = await getFile(user.s3bucketName as string, resource.key as string)
-            resources.push({ ...resource, url:resourceURL.url })
-            return resources
-        }
-    },
-    async addResource(userId:string, lessonId:number, resourcePath:string, extension:string){
-        const user = await userModel.findOneBy({ id:userId })
-        if(!user) throw boom.badRequest('user not found')
-        const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}} } } })
-        if(!lesson) throw boom.notFound('lesson to add video not found.')
-        const s3result = await uploadFile(user.s3bucketName as string, resourcePath, extension)
-        lesson.video = s3result.key;
-        lessonModel.save(lesson)
-        return lesson
-    },
-    async updateResource(userId:string, lessonId:number, videoPath:string, extension:string){
-        const user = await userModel.findOneBy({ id:userId })
-        if(!user) throw boom.badRequest('user not found')
-        const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}} } }})
-        if(!lesson) throw boom.notFound('lesson to add video not found.')
-        if(lesson.video){ // delete from s3 and field
-            const s3result = await deleteFile(user.s3bucketName as string, lesson.video)
-        }
-        const s3result = await uploadFile(user.s3bucketName as string, videoPath, extension)
-        lesson.video = s3result.key;
-        lessonModel.save(lesson)
-        return lesson
-    },
-    async removeResource(userId:string, lessonId:number){
-        const user = await userModel.findOneBy({ id:userId })
-        if(!user) throw boom.badRequest('user not found')
-        const lesson = await lessonModel.findOne({ where: { id:lessonId, section:{ course:{user:{id:userId}} } }})
-        if(!lesson) throw boom.notFound('lesson to add video not found.')
-        if(!lesson.video) throw boom.notFound('this lesson do not have a video to delete.')
-        const s3result = await deleteFile(user.s3bucketName as string, lesson.video)
-        lesson.video = null;
-        lessonModel.save(lesson)
-        return lesson
-    },
-
 }

@@ -2,7 +2,7 @@ export {};
 
 type databaseType = 'mysql'
 
-declare global {
+declare global {    
   namespace Express {
     interface Request {
       imagePath: undefined|string

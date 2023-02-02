@@ -13,7 +13,7 @@ router.post('/:id', async(req:Request, res:Response, next:NextFunction)=>{
         const lessonId = parseInt(req.params.id);
         const resourcePath = (req.files?.resource as UploadedFile).tempFilePath;
         const resourceData = req.body;
-        const result = await resourceService.addResource(userId, lessonId, resourceData, resourcePath, 'png');
+        const result = await resourceService.addResource(userId, lessonId, resourceData, resourcePath, (req.files?.resource as {mimetype:string}).mimetype.split('/')[1]);
         handleResponse(res, 200, 'resource uploaded', result)
     } catch (error) {
         next(error)
