@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryColumn, OneToMany, Generated } from "typeorm"
+import { Client } from "./client"
 import { Course } from "./course"
 
 @Entity()
@@ -35,5 +36,8 @@ export class User {
     //RELATIONS 
     @OneToMany(()=>Course, (course)=>course.user, { onDelete:"CASCADE", cascade:true })
     courses?: Course[]
+
+    @OneToMany(()=>Client, (client)=>client.user)
+    clients?:Client
 }
 
