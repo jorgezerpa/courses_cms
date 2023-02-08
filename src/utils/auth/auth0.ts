@@ -1,10 +1,7 @@
-import  { auth, requiredScopes } from 'express-oauth2-jwt-bearer'
+const { auth } = require('express-oauth2-jwt-bearer');
 
-// Authorization middleware. When used, the Access Token must
-// exist and be verified against the Auth0 JSON Web Key Set.
-export const checkJwt = auth({
-    audience: 'https://zerpasw.zerpacode.com/api',
-    issuerBaseURL: `https://dev-x7zwzkjp2jhejnw5.us.auth0.com/`,
+export const jwtCheck = auth({
+  audience: 'zerpacode-courses.cms',
+  issuerBaseURL: 'https://dev-x7zwzkjp2jhejnw5.us.auth0.com/',
+  tokenSigningAlg: 'RS256'
 });
-
-export const adminScopes = requiredScopes('admin');
