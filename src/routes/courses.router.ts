@@ -19,6 +19,7 @@ router.post('/', validatorHandler(createCourseSchema, 'body'), async(req:Request
 
 router.get('/', validatorHandler(getCoursesFilters, 'query'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
+        console.log(req.auth.payload.sub)
         const userId = req.user?.sub || 'auth0|1234';
         const filter=req.query;
         const courses = await courseService.list(userId, filter);

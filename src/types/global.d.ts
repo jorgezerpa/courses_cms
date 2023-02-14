@@ -5,8 +5,22 @@ type databaseType = 'mysql'
 declare global {    
   namespace Express {
     interface Request {
-      imagePath: undefined|string
+      imagePath: undefined|string;
+      auth: {
+        header: { alg: string, typ: string, kid: string },
+        token: string,
+        payload:{
+          iss: string,
+          sub: string,
+          aud: string[],
+          iat: number,
+          exp: number,
+          azp: string,
+          scope: string
+        }
+      }
     }
+
     interface User {
       id: string;
       sub: string;
