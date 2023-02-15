@@ -15,12 +15,12 @@ const client = new S3Client({
                 HANDLE BUCKETS
    -------------------------------------------- */ 
    //function called when create a new user
-// export async function createBucket(user:User){
-//     const bucketName = user.s3Identifier as string + "-" + Date.now();
-//     const command = new CreateBucketCommand({ Bucket: bucketName })
-//     const result = await client.send(command)
-//     return { bucketName, result }
-// }
+export async function createBucket(s3BucketIdentifier:string){
+    const bucketName = s3BucketIdentifier;
+    const command = new CreateBucketCommand({ Bucket: bucketName })
+    const result = await client.send(command)
+    return { bucketName, result }
+}
 
 
 /* ---------------------------------------------
