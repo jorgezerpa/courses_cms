@@ -1,16 +1,14 @@
 import express, { Router, Response, Request, NextFunction } from 'express'
-import { getUserInfo } from '../utils/auth/auth0';
 import { handleResponse } from '../responses/response';
 import courseService from '../services/course.service';
 import { createCourseSchema, getCourseSchema, updateCourseSchema, getCoursesFilters } from '../schemas/course.schema'
 import validatorHandler from '../middlewares/validator.handler';
-import axios from 'axios';
 
 const router:Router = express.Router();
 
 router.post('/', validatorHandler(createCourseSchema, 'body'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const courseData = req.body;
         const newCourse = await courseService.create(userId, courseData)
         handleResponse(res, 201, 'course created.', newCourse)
@@ -22,9 +20,7 @@ router.post('/', validatorHandler(createCourseSchema, 'body'), async(req:Request
 router.get('/', validatorHandler(getCoursesFilters, 'query'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
         // get user info from auth0 
-        const userInfo = await getUserInfo(req.auth.token)
-        console.log(userInfo)
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const filter=req.query;
         const courses = await courseService.list(userId, filter);
         handleResponse(res, 200, 'courses list', {courses})
@@ -35,7 +31,7 @@ router.get('/', validatorHandler(getCoursesFilters, 'query'), async(req:Request,
 
 router.get('/:id', validatorHandler(getCourseSchema, 'params'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const courseId = parseInt(req.params.id);
         const course = await courseService.listOne(userId, courseId);
         handleResponse(res, 200, 'course', course)
@@ -46,7 +42,7 @@ router.get('/:id', validatorHandler(getCourseSchema, 'params'), async(req:Reques
 
 router.patch('/:id',validatorHandler(getCourseSchema, 'params'), validatorHandler(updateCourseSchema, 'body'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const courseId = parseInt(req.params.id);
         const data = req.body;
         const course = await courseService.updateOne(userId, courseId, data);
@@ -58,7 +54,7 @@ router.patch('/:id',validatorHandler(getCourseSchema, 'params'), validatorHandle
 
 router.delete('/:id', validatorHandler(getCourseSchema, 'params') , async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const courseId = parseInt(req.params.id);
         const result = await courseService.deleteOne(userId, courseId);
         handleResponse(res, 200, 'course deleted', result)

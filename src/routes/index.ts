@@ -6,8 +6,6 @@ const { requiredScopes } = require('express-oauth2-jwt-bearer');
 import coursesRouter from './courses.router'
 import sectionsRouter from './sections.router'
 import lessonsRouter from './lessons.router'
-import userRouter from './user.router'
-import clientRouter from './client.router'
 import resourcesRouter from './resources.router'
 
 function routerApi(app:Application) {
@@ -16,7 +14,6 @@ function routerApi(app:Application) {
   // router.use('/user', userRouter);
   router.use(jwtCheck);
   router.use('/courses', requiredScopes('read:courses'), coursesRouter);
-  router.use('/client', clientRouter);
   router.use('/sections', sectionsRouter);
   router.use('/lessons', lessonsRouter);
   router.use('/resources', resourcesRouter);

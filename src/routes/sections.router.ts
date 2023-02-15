@@ -8,7 +8,7 @@ const router:Router = express.Router();
 
 router.post('/:id', validatorHandler(createSectionSchema, 'body'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const courseId = parseInt(req.params.id)
         const sectionData = req.body;
         const newSection = await sectionService.create(userId, courseId, sectionData)
@@ -20,7 +20,7 @@ router.post('/:id', validatorHandler(createSectionSchema, 'body'), async(req:Req
 
 router.get('/:id', async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const courseId = parseInt(req.params.id);
         const sections = await sectionService.list(userId, courseId);
         handleResponse(res, 200, 'courses list', {sections})
@@ -31,7 +31,7 @@ router.get('/:id', async(req:Request, res:Response, next:NextFunction)=>{
 
 router.get('/get-section/:id', validatorHandler(getSectionSchema, 'params'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const sectionId = parseInt(req.params.id);
         const section = await sectionService.listOne(userId, sectionId);
         handleResponse(res, 200, 'section', section)
@@ -42,7 +42,7 @@ router.get('/get-section/:id', validatorHandler(getSectionSchema, 'params'), asy
 
 router.patch('/:id', validatorHandler(getSectionSchema, 'params'), validatorHandler(updateSectionSchema, 'body'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const sectionId = parseInt(req.params.id);
         const data = req.body;
         const section = await sectionService.updateOne(userId, sectionId, data);
@@ -54,7 +54,7 @@ router.patch('/:id', validatorHandler(getSectionSchema, 'params'), validatorHand
 
 router.delete('/:id', validatorHandler(getSectionSchema, 'params') , async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        const userId = req.user?.sub || 'auth0|1234';
+        const userId = req.auth.payload.sub || 'auth0|1234';
         const sectionId = parseInt(req.params.id);
         const result = await sectionService.deleteOne(userId, sectionId);
         handleResponse(res, 200, 'section deleted', result)

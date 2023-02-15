@@ -8,9 +8,11 @@ export const jwtCheck = auth({
 });
 
 export const getUserInfo = async(accessToken:string) => {
-  return await axios.get('https://courses-cms.us.auth0.com/userinfo', {
+  const result = await axios.get('https://courses-cms.us.auth0.com/userinfo', {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         })
+
+  return result.data
 }
