@@ -23,6 +23,10 @@ app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
+app.get('/test-unicorn', (req, res)=>{
+  res.send('this gonna be an unicorn soon. Let`s go beast! you can do it :)')
+})
+
 app.listen(port, ():void => {
   console.log('app listen in port ' +  port);
 });
