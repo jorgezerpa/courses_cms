@@ -1,8 +1,10 @@
 import express, { Router, Response, Request, NextFunction } from 'express'
+import { getUserInfo } from '../utils/auth/auth0';
 import { handleResponse } from '../responses/response';
 import courseService from '../services/course.service';
 import { createCourseSchema, getCourseSchema, updateCourseSchema, getCoursesFilters } from '../schemas/course.schema'
 import validatorHandler from '../middlewares/validator.handler';
+import axios from 'axios';
 
 const router:Router = express.Router();
 
@@ -19,7 +21,9 @@ router.post('/', validatorHandler(createCourseSchema, 'body'), async(req:Request
 
 router.get('/', validatorHandler(getCoursesFilters, 'query'), async(req:Request, res:Response, next:NextFunction)=>{
     try {
-        console.log(req.auth.payload.sub)
+        // get user info from auth0 
+        const userInfo = await getUserInfo(req.auth.token)
+        console.log(userInfo)
         const userId = req.user?.sub || 'auth0|1234';
         const filter=req.query;
         const courses = await courseService.list(userId, filter);
